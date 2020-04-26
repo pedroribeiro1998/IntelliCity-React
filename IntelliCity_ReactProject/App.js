@@ -11,43 +11,56 @@ import {
 //Novo layout
   function App(){
       return(
-          <View style={styles.body}>
-              <Text style={styles.highlight}> View Body </Text>
-            <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}></Text>
-                <Text style={styles.sectionDescription}>
-                    Edit <Text style={styles.highlight}> App.js </Text>
-                    to change this screen and then come back to see your edits.
-                </Text>
+          <View style={styles.full}>
+            <View style={styles.half1}>
+                <Text style={styles.text}> This is 1</Text>
+            </View>
+            <View style={styles.half2}>
+                <View style={styles.half21}>
+                    <Text style={styles.text}> This is 2/3</Text>
+                </View>
+                <View style={styles.half22}>
+                    <Text style={styles.text}> This is 1/3</Text>
+                </View>
             </View>
           </View>
       );
   }
 
   const styles = StyleSheet.create({
-    body: {
-        backgroundColor: Colors.white,
-        borderWidth: 4,
-        borderColor: Colors.green,
+    full: {
+        flex: 1,
     },
-    sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
-      borderWidth: 4,
+    halfx: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: Colors.black,
+    half1: {
+        flex: 1,
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-        color: Colors.dark,
+    half2: {
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: 'blue',
     },
-    highlight: {
-        fontWeight: '700',
+    half21:{
+        flex: 2,
+        backgroundColor: 'green',
+        justifyContent: 'center',
+    },
+    half22:{
+        flex: 1,
+        backgroundColor: 'yellow',
+        justifyContent: 'center',       // alinhar vertical
+        alignItems: 'center',           // alinhar horizontal
+    },
+    text:{
+        color: 'black',
+        fontSize: 25,
     },
   });
 
