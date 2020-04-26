@@ -8,7 +8,7 @@ import {
   import {
     Colors
   } from 'react-native/Libraries/NewAppScreen';
-//Novo layoute
+//Novo layoutedf
   function App(){
       return(
           <View style={styles.body}>
