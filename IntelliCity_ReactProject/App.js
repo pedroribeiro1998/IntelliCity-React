@@ -15,7 +15,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-//teste
+//teste tytt
 import {
   Header,
   LearnMoreLinks,
