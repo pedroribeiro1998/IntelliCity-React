@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,40 +12,54 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-function App(){
-    return (
-      <View style={styles.full}>
-        <View style={styles.part1}>
-        <Image
-            style={styles.stretch}
-            source={require('./Images/react.png')}
+export default function App() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  return (
+    <View style={styles.full}>
+      <View style={styles.part1}>
+      <Image
+          style={styles.image}
+          source={require('./Images/react.png')}
+        />
+      </View>
+      <View style={styles.part2}>
+        <TextInput
+          style={styles.textinput}
+          placeholder="Username"
+          onChangeText={text => setUsername(text)}
+          defaultValue={username}
+        />
+        <TextInput
+          style={styles.textinput}
+          placeholder="Password"
+          onChangeText={text => setPassword(text)}
+          defaultValue={password}
+        />
+        <Text style={styles.textinput2}>
+        {username + ' - ' + password}
+        </Text>
+        <View style={styles.buttonview}>
+          <Button
+            onPress={() => {
+                alert('Login com username=' + username + ' e password=' + password);
+            }}
+            color="blue"
+            title="Login"
           />
-        </View>
-        <View style={styles.part2}>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Username"
-          />
-          <TextInput
-            style={styles.textinput}
-            placeholder="Password"
-          />
-          <View style={styles.buttonview}>
-            <Button
-              color="blue"
-              title="Login"
-            />
-          </View>
-        </View>
-        <View style={styles.part3}>
-            <Button
-              color="orange"
-              title="Reports"
-            />
         </View>
       </View>
+      <View style={styles.part3}>
+          <Button
+            color="orange"
+            title="Acesso anonimo"
+          />
+      </View>
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   full: {
@@ -82,7 +96,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
   },
-  stretch: {
+  textinput2: {
+    height: 40,
+    margin: 10,
+  },
+  image: {
     flex: 1,
     width: 150,
     height: 150,
