@@ -12,18 +12,13 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-/*
-        <Image
-            style={styles.stretch}
-            source={require('./IntelliCity_ReactProject/Images/react.png')}
-          />
-*/
 function App(){
     return (
       <View style={styles.full}>
         <View style={styles.part1}>
         <Image
             style={styles.stretch}
+            source={require('./Images/react.png')}
           />
         </View>
         <View style={styles.part2}>
@@ -45,7 +40,7 @@ function App(){
         <View style={styles.part3}>
             <Button
               color="orange"
-              title="Acesso anonimo"
+              title="Reports"
             />
         </View>
       </View>
