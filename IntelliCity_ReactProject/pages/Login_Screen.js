@@ -8,58 +8,22 @@ import {
   TextInput,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+function Login_Screen({ navigation }) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    return (
+      /*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Home Screen</Text>
+      </View>*/
+    //const [username, setUsername] = useState('');
+    //const [password, setPassword] = useState('');
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
-import Login_Screen from './pages/Login_Screen';
-import Registar_Screen from './pages/Registar_Screen';
-import ReportsList_Screen from './pages/ReportsList_Screen';
-
-/*******************/ 
-
-const Stack = createStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login_Screen">
-        <Stack.Screen 
-          name="Login_Screen" 
-          component={Login_Screen}
-          options={{ title: 'Login' }}
-        />
-        <Stack.Screen 
-          name="Registar_Screen" 
-          component={Registar_Screen}
-          options={{ title: 'Registar' }}
-        />
-        <Stack.Screen 
-          name="ReportsList_Screen" 
-          component={ReportsList_Screen}
-          options={{ title: 'Lista de Reports' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-export default App;
-/****************** */
-/*
-export default function App() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  return (
     <View style={styles.full}>
       <View style={styles.part1}>
       <Image
           style={styles.image}
-          source={require('./Images/react.png')}
+          source={require('../Images/react.png')}
         />
       </View>
       <View style={styles.part2}>
@@ -75,9 +39,11 @@ export default function App() {
           onChangeText={text => setPassword(text)}
           defaultValue={password}
         />
+
         <Text style={styles.textinput2}>
         {username + ' - ' + password}
         </Text>
+        
         <View style={styles.buttonview}>
           <Button
             onPress={() => {
@@ -87,18 +53,34 @@ export default function App() {
             title="Login"
           />
         </View>
+        <View style={styles.buttonview}>
+          <Button
+            onPress={() => {
+              //alert('Vamos registar!');
+              navigation.navigate('Registar_Screen');
+            }}
+            color="green"
+            title="Registar"
+          />
+        </View>
       </View>
       <View style={styles.part3}>
           <Button
+          onPress={() => {
+            //alert('Vamos registar!');
+            navigation.navigate('ReportsList_Screen');
+          }}
             color="orange"
-            title="Acesso anonimo"
+            title="Lista de Reports"
           />
       </View>
     </View>
-  );
-}
+    );
+  }
 
+  export default Login_Screen;
 
+  
 const styles = StyleSheet.create({
   full: {
     flex: 1,
@@ -144,4 +126,3 @@ const styles = StyleSheet.create({
     height: 150,
 },
 });
-*/
