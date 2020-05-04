@@ -30,13 +30,13 @@ function Login_Screen({ navigation }) {
         <TextInput
           style={styles.textinput}
           placeholder="Username"
-          onChangeText={text => setUsername(text)}
+          onChangeText={username => setUsername(username)}
           defaultValue={username}
         />
         <TextInput
           style={styles.textinput}
           placeholder="Password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={password => setPassword(password)}
           defaultValue={password}
         />
 
@@ -47,7 +47,12 @@ function Login_Screen({ navigation }) {
         <View style={styles.buttonview}>
           <Button
             onPress={() => {
-                alert('Login com username=' + username + ' e password=' + password);
+              alert('Login com username=' + username + ' e password=' + password);
+
+              navigation.navigate('Map_Screen', {
+                username : username,
+                password : password,
+              });
             }}
             color="blue"
             title="Login"
