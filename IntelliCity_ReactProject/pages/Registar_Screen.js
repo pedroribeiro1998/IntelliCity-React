@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,10 +8,13 @@ import {
   TextInput,
 } from 'react-native';
 
+import {LocalizationContext} from '../services/localization/LocalizationContext';
+
 function Registar_Screen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [nome, setNome] = useState('');
+    const {translations} = useContext(LocalizationContext);
     return (
       /*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Home Screen</Text>
@@ -23,33 +26,29 @@ function Registar_Screen({ navigation }) {
     <View style={styles.full}>
       <View style={styles.part1}>
       <Text style={styles.text}>
-        Inserir dados do novo utilizador
+        {translations.InserirDadosText}
         </Text>
       </View>
       <View style={styles.part2}>
       <TextInput
           style={styles.textinput}
-          placeholder="Nome"
+          placeholder={translations.NomeTextInput}
           onChangeText={nome => setNome(nome)}
           defaultValue={nome}
         />
         <TextInput
           style={styles.textinput}
-          placeholder="Username"
+          placeholder={translations.UsernameTextInput}
           onChangeText={username => setUsername(username)}
           defaultValue={username}
         />
         <TextInput
           style={styles.textinput}
-          placeholder="Password"
+          placeholder={translations.PasswordTextInput}
           onChangeText={password => setPassword(password)}
           defaultValue={password}
         />
-
-        <Text style={styles.textinput2}>
-        {'dados inseridos: '+ nome + ' - ' + username + ' - ' + password}
-        </Text>
-
+        
         <View style={styles.buttonview}>
           <Button
           onPress={() => {
@@ -57,7 +56,7 @@ function Registar_Screen({ navigation }) {
             navigation.navigate('Login_Screen');
           }}
             color="green"
-            title="Registar"
+            title={translations.RegistarButton}
           />
         </View>
       </View>

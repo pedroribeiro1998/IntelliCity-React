@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,12 @@ import {
   TextInput,
 } from 'react-native';
 
+import {LocalizationContext} from '../services/localization/LocalizationContext';
+
 function Map_Screen({ route, navigation }) {
   const { username } = route.params;
   const { password } = route.params;
+  const {translations} = useContext(LocalizationContext);
 
     return (
       <View style={styles.part1}>
