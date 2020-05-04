@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,12 @@ import {
   TextInput,
 } from 'react-native';
 
+import {LocalizationContext} from '../services/localization/LocalizationContext';
+
 function Login_Screen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const {translations} = useContext(LocalizationContext);
     return (
       /*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Home Screen</Text>
@@ -29,20 +32,16 @@ function Login_Screen({ navigation }) {
       <View style={styles.part2}>
         <TextInput
           style={styles.textinput}
-          placeholder="Username"
+          placeholder={translations.UsernameTextInput}
           onChangeText={username => setUsername(username)}
           defaultValue={username}
         />
         <TextInput
           style={styles.textinput}
-          placeholder="Password"
+          placeholder={translations.PasswordTextInput}
           onChangeText={password => setPassword(password)}
           defaultValue={password}
         />
-
-        <Text style={styles.textinput2}>
-        {username + ' - ' + password}
-        </Text>
         
         <View style={styles.buttonview}>
           <Button
@@ -55,7 +54,7 @@ function Login_Screen({ navigation }) {
               });
             }}
             color="blue"
-            title="Login"
+            title={translations.LoginButton}
           />
         </View>
         <View style={styles.buttonview}>
@@ -65,7 +64,7 @@ function Login_Screen({ navigation }) {
               navigation.navigate('Registar_Screen');
             }}
             color="green"
-            title="Registar"
+            title={translations.RegistarButton}
           />
         </View>
       </View>
@@ -76,7 +75,7 @@ function Login_Screen({ navigation }) {
             navigation.navigate('ReportsList_Screen');
           }}
             color="orange"
-            title="Lista de Reports"
+            title={translations.ReportsListButton}
           />
       </View>
     </View>

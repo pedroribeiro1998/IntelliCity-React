@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React,  {useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -14,6 +14,8 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {LocalizationContext} from './services/localization/LocalizationContext';
+
 
 import Login_Screen from './pages/Login_Screen';
 import Registar_Screen from './pages/Registar_Screen';
@@ -26,28 +28,30 @@ import Map_Screen from './pages/Map_Screen';
 const Stack = createStackNavigator();
 
 function App() {
+  const {translations} = useContext(LocalizationContext);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login_Screen">
         <Stack.Screen 
           name="Login_Screen" 
           component={Login_Screen}
-          options={{ title: 'Login' }}
+          options={{ title: translations.LoginNavBar }}
         />
         <Stack.Screen 
           name="Registar_Screen" 
           component={Registar_Screen}
-          options={{ title: 'Registar' }}
+          options={{ title: translations.RegistarNavBar }}
         />
         <Stack.Screen 
           name="ReportsList_Screen" 
           component={ReportsList_Screen}
-          options={{ title: 'Lista de Reports' }}
+          options={{ title: translations.ReportsListNavBar }}
         />
         <Stack.Screen 
           name="Map_Screen" 
           component={Map_Screen}
-          options={{ title: 'Mapa' }}
+          options={{ title: translations.MapaNavBar }}
         />
       </Stack.Navigator>
     </NavigationContainer>

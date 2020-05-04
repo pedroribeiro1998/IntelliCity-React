@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,12 +8,14 @@ import {
   TextInput,
 } from 'react-native';
 
-function ReportsList_Screen({ navigation }) {
+import {LocalizationContext} from '../services/localization/LocalizationContext';
 
+function ReportsList_Screen({ navigation }) {
+  const {translations} = useContext(LocalizationContext);
     return (
       <View style={styles.part1}>
       <Text style={styles.text}>
-        Lista de reports.
+        {translations.ReportsListNavBar}
         </Text>
       </View>
     );
