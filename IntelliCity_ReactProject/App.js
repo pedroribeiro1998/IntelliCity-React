@@ -18,6 +18,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login_Screen from './pages/Login_Screen';
 import Registar_Screen from './pages/Registar_Screen';
 import ReportsList_Screen from './pages/ReportsList_Screen';
+import Map_Screen from './pages/Map_Screen';
+
 
 /*******************/ 
 
@@ -41,6 +43,11 @@ function App() {
           name="ReportsList_Screen" 
           component={ReportsList_Screen}
           options={{ title: 'Lista de Reports' }}
+        />
+        <Stack.Screen 
+          name="Map_Screen" 
+          component={Map_Screen}
+          options={{ title: 'Mapa' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

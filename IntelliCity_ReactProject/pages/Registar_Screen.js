@@ -30,19 +30,19 @@ function Registar_Screen({ navigation }) {
       <TextInput
           style={styles.textinput}
           placeholder="Nome"
-          onChangeText={text => setNome(text)}
+          onChangeText={nome => setNome(nome)}
           defaultValue={nome}
         />
         <TextInput
           style={styles.textinput}
           placeholder="Username"
-          onChangeText={text => setUsername(text)}
+          onChangeText={username => setUsername(username)}
           defaultValue={username}
         />
         <TextInput
           style={styles.textinput}
           placeholder="Password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={password => setPassword(password)}
           defaultValue={password}
         />
 
