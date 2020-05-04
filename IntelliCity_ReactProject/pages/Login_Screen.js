@@ -1,4 +1,4 @@
-import React, { Component, useState, useContext } from 'react';
+import React, { Component, useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,14 +6,31 @@ import {
   Image,
   Button,
   TextInput,
+  Dimensions,
 } from 'react-native';
 
 import {LocalizationContext} from '../services/localization/LocalizationContext';
+
+const window = Dimensions.get("window");
+const screen = Dimensions.get("screen");
 
 function Login_Screen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {translations} = useContext(LocalizationContext);
+    const [dimensions, setDimensions] = useState({ window, screen });
+
+    const onChange = ({ window, screen }) => {
+      setDimensions({ window, screen });
+    };
+
+    useEffect(() => {
+      Dimensions.addEventListener("change", onChange);
+      return () => {
+        Dimensions.removeEventListener("change", onChange);
+      };
+    });
+
     return (
       /*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Home Screen</Text>
@@ -22,7 +39,7 @@ function Login_Screen({ navigation }) {
     //const [password, setPassword] = useState('');
 
 
-    <View style={styles.full}>
+    <View style={dimensions.window.height > dimensions.window.width ? styles.fullP : styles.fullL}>
       <View style={styles.part1}>
       <Image
           style={styles.image}
@@ -86,6 +103,17 @@ function Login_Screen({ navigation }) {
 
   
 const styles = StyleSheet.create({
+  fullP: {
+    flex: 1,
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  fullL: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'gray',
+  },
   full: {
     flex: 1,
     flexDirection: 'column',
