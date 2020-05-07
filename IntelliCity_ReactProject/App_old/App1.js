@@ -23,7 +23,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
+/*
 const App: () => React$Node = () => {
   return (
     <>
@@ -70,7 +70,7 @@ const App: () => React$Node = () => {
       </SafeAreaView>
     </>
   );
-};
+};*/
 
 const styles = StyleSheet.create({
   scrollView: {
