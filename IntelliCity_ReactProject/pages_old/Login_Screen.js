@@ -31,6 +31,15 @@ function Login_Screen({ navigation }) {
       };
     });
 
+    /**
+    * Returns true if the screen is in portrait mode
+    */
+    const isPortrait = () => {
+      const dim = Dimensions.get('screen');
+      return dim.height >= dim.width;
+    };
+    const [orientation, setPassword] = useState('');
+
     return (
       /*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Home Screen</Text>
@@ -63,7 +72,7 @@ function Login_Screen({ navigation }) {
         <View style={styles.buttonview}>
           <Button
             onPress={() => {
-              alert('Login com username=' + username + ' e password=' + password);
+              alert('Login com username: ' + username + ' e password: ' + password);
 
               navigation.navigate('Map_Screen', {
                 username : username,
@@ -120,17 +129,17 @@ const styles = StyleSheet.create({
   },
   part1: {
     flex: 1,
-//    backgroundColor: 'red',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
   },
   part2: {
     flex: 2,
-  //  backgroundColor: 'blue',
+    backgroundColor: 'blue',
   },
   part3: {
     flex: 1,
-  //  backgroundColor: 'red',
+    backgroundColor: 'red',
     justifyContent: 'flex-end',
     margin: 10,
   },
