@@ -1,0 +1,15 @@
+{
+    "WELCOME": "Welcome to Localization",
+    "BUTTON": "b en",
+    "LoginNavBar": "Login",
+    "UsernameTextInput": "Username",
+    "PasswordTextInput": "Password",
+    "LoginButton": "Login",
+    "RegistarButton": "Register",
+    "ReportsListButton": "Reports List",
+    "RegistarNavBar": "Register",
+    "InserirDadosText": "Register user",
+    "NomeTextInput": "Name",
+    "ReportsListNavBar": "Reports List",
+    "MapaNavBar": "Map"
+  }

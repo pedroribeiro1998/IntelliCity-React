@@ -44,22 +44,17 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class Map_Screen extends React.Component{
+export default class LoginScreen extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
-    const isPortrait = () => {
-      const dim = Dimensions.get('screen');
-      return dim.height >= dim.width;
-    };
 
     this.state = {
-      orientation: isPortrait() ? 'portrait' : 'landscape',
       screen: Dimensions.get('window'),
+      nome:'',
       username: '',
       password: '',
     };
-
   }
   
   componentDidMount() {
@@ -96,22 +91,39 @@ export default class Map_Screen extends React.Component{
   }
 
   render(){
-    //const username = this.props.navigation.getParam('username', null); 
-    //const password = this.props.navigation.getParam('password', null);  
-
-    //const {username, password} = this.props.navigation.state.params;
-    //const { username, password } = this.props.navigation.state.params ? this.props.navigation.state.params: null;
-    const { navigate } = this.props.navigation;
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
           <Text style={this.getStyle().text} onLayout = {this.onLayout.bind(this)}>
-            Mapa
+            {translate("InserirDadosText")}
           </Text>
-          <Text>User Details</Text>
-          <Text>
- 
-          </Text>
+        </View>
+        <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("NomeTextInput")}
+            onChangeText={nome => setNome(nome)}
+          />
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("UsernameTextInput")}
+            onChangeText={username => setUsername(username)}
+          />
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("PasswordTextInput")}
+            onChangeText={password => setPassword(password)}
+          />
+          <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
+            <Button
+              onPress={() => {
+                //alert(nome + ' registado com sucesso!');
+                this.props.navigation.navigate('Login_Screen');
+              }}
+              color="green"
+              title={translate("RegistarButton")}
+            />
+          </View>
         </View>
       </View>
     );
@@ -125,19 +137,13 @@ const portraitStyles = StyleSheet.create({
   },
   part1: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   part2: {
     flex: 2,
-    backgroundColor: 'blue',
-  },
-  part3: {
-    flex: 1,
-    backgroundColor: 'red',
-    justifyContent: 'flex-end',
-    margin: 10,
+    backgroundColor: 'white',
   },
   buttonview: {
     flex: 1,
@@ -149,7 +155,7 @@ const portraitStyles = StyleSheet.create({
   },
   textinput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     margin: 10,
   },
@@ -159,8 +165,9 @@ const portraitStyles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });
    
@@ -171,23 +178,18 @@ const landscapeStyles = StyleSheet.create({
   },
   part1: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   part2: {
     flex: 2,
-    backgroundColor: 'blue',
-  },
-  part3: {
-    flex: 1,
-    backgroundColor: 'blue',
-    justifyContent: 'flex-end',
-    margin: 10,
+    backgroundColor: 'white',
   },
   buttonview: {
     flex: 1,
     margin: 10,
+    borderColor: 'black',
   },
   text: {
     color: 'black',
@@ -195,7 +197,7 @@ const landscapeStyles = StyleSheet.create({
   },
   textinput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     margin: 10,
   },
@@ -205,7 +207,8 @@ const landscapeStyles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });
