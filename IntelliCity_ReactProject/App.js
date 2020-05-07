@@ -26,7 +26,7 @@ import {LocalizationContext} from './services/localization/LocalizationContext';
 
 
 import Login_Screen from './pages/Login_Screen2';
-import Registar_Screen from './pages/Registar_Screen';
+import Registar_Screen from './pages/Registar_Screen2';
 import ReportsList_Screen from './pages/ReportsList_Screen';
 import Map_Screen from './pages/Map_Screen';
 

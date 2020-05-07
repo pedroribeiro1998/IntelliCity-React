@@ -51,6 +51,7 @@ export default class LoginScreen extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
+      nome:'',
       username: '',
       password: '',
     };
@@ -93,55 +94,37 @@ export default class LoginScreen extends React.Component{
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
-        <Image
-            style={this.getStyle().image} onLayout = {this.onLayout.bind(this)}
-            source={require('../Images/map.png')}
-          />
+          <Text style={this.getStyle().text} onLayout = {this.onLayout.bind(this)}>
+            {translate("InserirDadosText")}
+          </Text>
         </View>
         <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
-        <TextInput
-          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
-          placeholder={translate("UsernameTextInput")}
-          onChangeText={(val) => this.setState({username: val})}
-        />
-        <TextInput
-          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
-          placeholder={translate("PasswordTextInput")}
-          onChangeText={(val) => this.setState({password: val})}
-        />
-        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate('Map_Screen', {
-                username: this.state.username, 
-                password: this.state.password
-              });
-            }}
-            color="blue"
-            title={translate("LoginButton")}
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("NomeTextInput")}
+            onChangeText={nome => setNome(nome)}
           />
-        </View>
-        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              //alert('Vamos registar!');
-              this.props.navigation.navigate('Registar_Screen');
-            }}
-            color="green"
-            title={translate("RegistarButton")}
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("UsernameTextInput")}
+            onChangeText={username => setUsername(username)}
           />
-        </View>
-        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              //alert('Vamos registar!');
-              this.props.navigation.navigate('ReportsList_Screen');
-            }}
-            color="orange"
-            title={translate("ReportsListButton")}
+          <TextInput
+            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            placeholder={translate("PasswordTextInput")}
+            onChangeText={password => setPassword(password)}
           />
+          <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
+            <Button
+              onPress={() => {
+                //alert(nome + ' registado com sucesso!');
+                this.props.navigation.navigate('Login_Screen');
+              }}
+              color="green"
+              title={translate("RegistarButton")}
+            />
+          </View>
         </View>
-      </View>
       </View>
     );
   }
@@ -161,12 +144,6 @@ const portraitStyles = StyleSheet.create({
   part2: {
     flex: 2,
     backgroundColor: 'white',
-  },
-  part3: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'flex-end',
-    margin: 10,
   },
   buttonview: {
     flex: 1,
@@ -209,12 +186,6 @@ const landscapeStyles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'white',
   },
-  part3: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'flex-end',
-    margin: 10,
-  },
   buttonview: {
     flex: 1,
     margin: 10,
@@ -227,7 +198,6 @@ const landscapeStyles = StyleSheet.create({
   textinput: {
     height: 40,
     borderColor: 'black',
-    //backgroundColor: 'grey',
     borderWidth: 1,
     margin: 10,
   },
