@@ -15,13 +15,13 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {LocalizationContext} from '../services/localization/LocalizationContext';
+import {LocalizationContext} from './services/localization/LocalizationContext';
 
 
-import Login_Screen from '../pages/Login_Screen2';
-import Registar_Screen from '../pages/Registar_Screen';
-import ReportsList_Screen from '../pages/ReportsList_Screen';
-import Map_Screen from '../pages/Map_Screen';
+import Login_Screen from './pages/Login_Screen';
+import Registar_Screen from './pages/Registar_Screen';
+import ReportsList_Screen from './pages/ReportsList_Screen';
+import Map_Screen from './pages/Map_Screen';
 
 
 const window = Dimensions.get("window");
