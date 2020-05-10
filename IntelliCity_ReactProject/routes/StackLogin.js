@@ -22,8 +22,8 @@ import ReportsList_Screen from './../pagesClass/ReportsList_ScreenClass';
 import Map_Screen from './../pagesClass/Map_ScreenClass';
 */
 
-import Login from './../pagesNav/Login';
-import Other from './../pagesNav/Other';
+import Login from '../pagesNav/Login';
+import Registar_ScreenClass from './../pagesNav/Registar_ScreenClass';
 import DrawerRoute from './DrawerRoute';
 import DrawerRouteSemLogin from './DrawerRouteSemLogin';
 
@@ -31,17 +31,19 @@ import DrawerRouteSemLogin from './DrawerRouteSemLogin';
 const Stack = createStackNavigator();
 
 function StackLogin({navigation}) {
-   return (
-     <NavigationContainer>
-       <Stack.Navigator initialRouteName="Login">
-         <Stack.Screen name="Login" component={Login}
-            options={{headerShown : false,}}/>
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login}
+          options={{headerShown : false,}}/>
+        <Stack.Screen name="Registar_ScreenClass" component={Registar_ScreenClass}
+          />
         <Stack.Screen name="DrawerRouteSemLogin" component={DrawerRouteSemLogin}
-           options={{headerShown : false,}}/>
-         <Stack.Screen name="DrawerRoute" component={DrawerRoute}
-            options={{headerShown : false,}}/>
-       </Stack.Navigator>
-      </NavigationContainer>
+          options={{headerShown : false,}}/>
+        <Stack.Screen name="DrawerRoute" component={DrawerRoute}
+          options={{headerShown : false,}}/>
+      </Stack.Navigator>
+    </NavigationContainer>
    );
  }
 
