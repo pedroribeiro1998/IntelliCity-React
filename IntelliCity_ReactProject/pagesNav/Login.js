@@ -33,7 +33,8 @@ function Login({ navigation }) {
             <Button
               color="blue"
               title="Login"
-              onPress={() => navigation.dispatch(StackActions.replace('Other'))}
+              //onPress={() => navigation.dispatch(StackActions.replace('Other'))}
+              onPress={() => navigation.navigate('DrawerRoute')}
             />
           </View>
         </View>
@@ -41,7 +42,9 @@ function Login({ navigation }) {
             <Button
               color="orange"
               title="Acesso anónimo"
-              onPress={() => navigation.navigate('DrawerRoute')}
+              onPress={() => navigation.navigate('DrawerRouteSemLogin')}
+              //onPress={() => navigation.dispatch(StackActions.replace('Other'))}
+              //onPress={() => navigation.navigate('DrawerRoute')}
             />
         </View>
       </View>

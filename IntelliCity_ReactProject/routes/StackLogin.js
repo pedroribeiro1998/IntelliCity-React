@@ -25,6 +25,7 @@ import Map_Screen from './../pagesClass/Map_ScreenClass';
 import Login from './../pagesNav/Login';
 import Other from './../pagesNav/Other';
 import DrawerRoute from './DrawerRoute';
+import DrawerRouteSemLogin from './DrawerRouteSemLogin';
 
 
 const Stack = createStackNavigator();
@@ -35,7 +36,7 @@ function StackLogin({navigation}) {
        <Stack.Navigator initialRouteName="Login">
          <Stack.Screen name="Login" component={Login}
             options={{headerShown : false,}}/>
-        <Stack.Screen name="Other" component={Other}
+        <Stack.Screen name="DrawerRouteSemLogin" component={DrawerRouteSemLogin}
            options={{headerShown : false,}}/>
          <Stack.Screen name="DrawerRoute" component={DrawerRoute}
             options={{headerShown : false,}}/>
