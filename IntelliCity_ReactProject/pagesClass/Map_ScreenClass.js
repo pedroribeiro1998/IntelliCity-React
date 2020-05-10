@@ -48,13 +48,8 @@ export default class Map_Screen extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
-    const isPortrait = () => {
-      const dim = Dimensions.get('screen');
-      return dim.height >= dim.width;
-    };
 
     this.state = {
-      orientation: isPortrait() ? 'portrait' : 'landscape',
       screen: Dimensions.get('window'),
       username: '',
       password: '',
