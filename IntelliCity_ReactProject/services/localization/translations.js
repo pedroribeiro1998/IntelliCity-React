@@ -15,7 +15,12 @@ const translations = {
     InserirDadosText: 'Insert user data',
     NomeTextInput: 'Name',
     ReportsListNavBar: 'Reports List',
-    MapaNavBar: 'Map'
+    MapaNavBar: 'Map',
+    About: 'About',
+    Other: 'Other',
+    ListaDetalhes: 'Details',
+    AddNewToMap : 'Add new to map',
+    logout : 'Logout'
   },
   pt: {
     WELCOME: 'Bem-vindo à multi-lingua',
@@ -30,7 +35,12 @@ const translations = {
     InserirDadosText: 'Inserir dados do utilizador',
     NomeTextInput: 'Nome',
     ReportsListNavBar: 'Lista de Reports',
-    MapaNavBar: 'Mapa'
+    MapaNavBar: 'Mapa',
+    About: 'Sobre',
+    Other: 'Outro',
+    ListaDetalhes: 'Detalhes',
+    AddNewToMap : 'Adicionar novo ao mapa',
+    logout : 'Terminar Sessão'
   }
 };
 

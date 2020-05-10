@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,6 +14,7 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {LocalizationContext} from '../services/localization/LocalizationContext';
 
 /*
 import Login_Screen from './../pagesClass/Login_ScreenClass';
@@ -31,12 +32,17 @@ import DrawerRouteSemLogin from './DrawerRouteSemLogin';
 const Stack = createStackNavigator();
 
 function StackLogin({navigation}) {
+  const {translations} = useContext(LocalizationContext);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login}
           options={{headerShown : false,}}/>
-        <Stack.Screen name="Registar_ScreenClass" component={Registar_ScreenClass}
+        <Stack.Screen 
+          name="Registar_ScreenClass" 
+          component={Registar_ScreenClass}
+          options={{ title: translations.RegistarButton }}
           />
         <Stack.Screen name="DrawerRouteSemLogin" component={DrawerRouteSemLogin}
           options={{headerShown : false,}}/>

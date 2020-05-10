@@ -15,10 +15,10 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Login_Screen from './pagesClass/Login_ScreenClass';
-import Registar_Screen from './pagesClass/Registar_ScreenClass';
-import ReportsList_Screen from './pagesClass/ReportsList_ScreenClass';
-import Map_Screen from './pagesClass/Map_ScreenClass';
+import Login_Screen from '../pagesClass/Login_ScreenClass';
+import Registar_Screen from '../pagesClass/Registar_ScreenClass';
+import ReportsList_Screen from '../pagesClass/ReportsList_ScreenClass';
+import Map_Screen from '../pagesClass/Map_ScreenClass';
 
 
 /*******************/ 
