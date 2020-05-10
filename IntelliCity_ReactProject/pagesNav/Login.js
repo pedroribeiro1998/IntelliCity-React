@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+import { StackActions } from '@react-navigation/native';
 
 import {
   I18nManager,
@@ -44,22 +45,16 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class Map_Screen extends React.Component{
+export default class LoginScreen extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
-    const isPortrait = () => {
-      const dim = Dimensions.get('screen');
-      return dim.height >= dim.width;
-    };
 
     this.state = {
-      orientation: isPortrait() ? 'portrait' : 'landscape',
       screen: Dimensions.get('window'),
       username: '',
       password: '',
     };
-
   }
   
   componentDidMount() {
@@ -96,23 +91,70 @@ export default class Map_Screen extends React.Component{
   }
 
   render(){
-    //const username = this.props.navigation.getParam('username', null); 
-    //const password = this.props.navigation.getParam('password', null);  
-
-    //const {username, password} = this.props.navigation.state.params;
-    //const { username, password } = this.props.navigation.state.params ? this.props.navigation.state.params: null;
-    const { navigate } = this.props.navigation;
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
-          <Text style={this.getStyle().text} onLayout = {this.onLayout.bind(this)}>
-            Mapa
-          </Text>
-          <Text>User Details</Text>
-          <Text>
- 
-          </Text>
+        <Image
+            style={this.getStyle().image} onLayout = {this.onLayout.bind(this)}
+            source={require('../Images/map.png')}
+          />
         </View>
+        <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
+        <TextInput
+          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+          placeholder={translate("UsernameTextInput")}
+          onChangeText={(val) => this.setState({username: val})}
+        />
+        <TextInput
+          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+          placeholder={translate("PasswordTextInput")}
+          onChangeText={(val) => this.setState({password: val})}
+        />
+        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
+          <Button
+
+            onPress={() => {
+              this.props.navigation.navigate('DrawerRoute');
+            }}
+            /*
+            onPress={() => {
+              this.props.navigation.navigate('Map_Screen', {
+                username: this.state.username, 
+                password: this.state.password
+              });
+            }}
+            */
+            color="blue"
+            title={translate("LoginButton")}
+          />
+        </View>
+        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
+          <Button
+            onPress={() => {
+              //alert('Vamos registar!');
+              this.props.navigation.navigate('Registar_ScreenClass');
+            }}
+            color="green"
+            title={translate("RegistarButton")}
+          />
+        </View>
+        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
+          <Button
+
+            onPress={() => {
+              this.props.navigation.navigate('DrawerRouteSemLogin');
+            }}
+            /*
+            onPress={() => {
+              //alert('Vamos registar!');
+              this.props.navigation.navigate('ReportsList_Screen');
+            }}
+            */
+            color="orange"
+            title={translate("ReportsListButton")}
+          />
+        </View>
+      </View>
       </View>
     );
   }
@@ -125,17 +167,17 @@ const portraitStyles = StyleSheet.create({
   },
   part1: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   part2: {
     flex: 2,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   part3: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     justifyContent: 'flex-end',
     margin: 10,
   },
@@ -149,7 +191,7 @@ const portraitStyles = StyleSheet.create({
   },
   textinput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     margin: 10,
   },
@@ -159,8 +201,9 @@ const portraitStyles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });
    
@@ -171,23 +214,24 @@ const landscapeStyles = StyleSheet.create({
   },
   part1: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   part2: {
     flex: 2,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   part3: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
     justifyContent: 'flex-end',
     margin: 10,
   },
   buttonview: {
     flex: 1,
     margin: 10,
+    borderColor: 'black',
   },
   text: {
     color: 'black',
@@ -195,7 +239,8 @@ const landscapeStyles = StyleSheet.create({
   },
   textinput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
+    //backgroundColor: 'grey',
     borderWidth: 1,
     margin: 10,
   },
@@ -205,7 +250,8 @@ const landscapeStyles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });
