@@ -10,6 +10,7 @@ import {LocalizationContext} from '../services/localization/LocalizationContext'
 import StackList from './StackList';
 import StackMap from './StackMap';
 import About from './../pagesNav/About';
+import InsertReport from './../pagesNav/InsertReport';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +22,10 @@ export default function DrawerRoute({navigation}) {
           name="List" 
           component={StackList}
           options={{ title: translations.ReportsListNavBar }} />
+        <Drawer.Screen 
+          name="InsertReport" 
+          component={InsertReport}
+          options={{ title: translations.InsertReport }} />
         <Drawer.Screen 
           name="Map" 
           component={StackMap}

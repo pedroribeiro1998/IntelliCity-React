@@ -20,7 +20,8 @@ const translations = {
     Other: 'Other',
     ListaDetalhes: 'Details',
     AddNewToMap : 'Add new to map',
-    logout : 'Logout'
+    logout : 'Logout',
+    InsertReport: 'Insert Report'
   },
   pt: {
     WELCOME: 'Bem-vindo à multi-lingua',
@@ -40,7 +41,8 @@ const translations = {
     Other: 'Outro',
     ListaDetalhes: 'Detalhes',
     AddNewToMap : 'Adicionar novo ao mapa',
-    logout : 'Terminar Sessão'
+    logout : 'Terminar Sessão',
+    InsertReport: 'Inserir reporte'
   }
 };
 
