@@ -112,37 +112,27 @@ export default class List extends React.Component{
 
   render(){
     return(
-      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
-        <Text>list main...</Text>
-        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate('ListDetails');
-            }}
-            color="orange"
-            title={translate("Detalhes")}
-          />
-        </View>
-
-
-        <View style = { styles.MainContainer }>
-          <FlatList
-            data={this.state.FlatListItems}
-            ItemSeparatorComponent={this.ListViewItemSeparator}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={{ backgroundColor: 'white', padding: 20 }}>
-                <Text>Id: {item.id}</Text>
-                <Text>titulo: {item.titulo}</Text>
-                <Text>descricao: {item.descricao}</Text>
-                <Text>localizacao: {item.localizacao}</Text>
-              </View>
-            )}
-          />
-        </View>
-
-
-
+      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+        <FlatList
+          data={this.state.FlatListItems}
+          ItemSeparatorComponent={this.ListViewItemSeparator}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={{ backgroundColor: 'white', padding: 20 }}>
+              <Text>Id: {item.id}</Text>
+              <Text>titulo: {item.titulo}</Text>
+              <Text>descricao: {item.descricao}</Text>
+              <Text>localizacao: {item.localizacao}</Text>
+              <Button
+                onPress={() => {
+                  this.props.navigation.navigate('ListDetails');
+                }}
+                color="orange"
+                title={translate("Detalhes")}
+              />
+            </View>
+          )}
+        />
       </View>
     );
   }
@@ -230,6 +220,13 @@ const portraitStyles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
   },
+  MainContainer :{
+    flex:1,
+    justifyContent: 'center',
+    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+    margin: 10,
+    flexDirection: 'column',
+  },
 });
    
 const landscapeStyles = StyleSheet.create({
@@ -278,5 +275,12 @@ const landscapeStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  },
+  MainContainer :{
+     flex:1,
+     justifyContent: 'center',
+     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+     margin: 10,
+     flexDirection: 'row',
   },
 });

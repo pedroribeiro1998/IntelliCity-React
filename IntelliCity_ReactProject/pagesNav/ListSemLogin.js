@@ -15,7 +15,16 @@ import {
   Button,
   TextInput,
   Dimensions,
+  Platform,
+  TouchableOpacity, 
+  Alert, 
+  YellowBox,
+  ListView,
+  FlatList 
 } from 'react-native';
+
+import Realm from 'realm';
+let realm;
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -50,26 +59,38 @@ export default class List extends React.Component{
     super(props);
     setI18nConfig(); // set initial config
 
+    realm = new Realm({ path: 'reports.realm' });
+    var reports = realm.objects('report');
+
     this.state = {
       screen: Dimensions.get('window'),
-      username: '',
-      password: '',
+      titulo : '',
+      descricao : '',
+      localizacao : '',
+      FlatListItems: reports,
     };
   }
+
+  ListViewItemSeparator = () => {
+    return (
+      <View style={{ height: 0.5, width: '100%', backgroundColor: '#000' }} />
+    );
+  };
   
+  // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
   }
-
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
   }
-
   handleLocalizationChange = () => {
     setI18nConfig();
     this.forceUpdate();
   };
+  // Multi-língua
   
+  // Portrait e Landscape
   getOrientation(){
     if (this.state.screen.width > this.state.screen.height) {
       return 'LANDSCAPE';
@@ -77,7 +98,6 @@ export default class List extends React.Component{
       return 'PORTRAIT';
     }
   }
-
   getStyle(){
     if (this.getOrientation() === 'LANDSCAPE') {
       return landscapeStyles;
@@ -85,28 +105,75 @@ export default class List extends React.Component{
       return portraitStyles;
     }
   }
-
   onLayout(){
     this.setState({screen: Dimensions.get('window')});
   }
+  // Portrait e Landscape
 
   render(){
     return(
-      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
-        <Text>list main...</Text>
-        <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate('ListDetails');
-            }}
-            color="orange"
-            title={translate("Detalhes")}
-          />
-        </View>
+      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+        <FlatList
+          data={this.state.FlatListItems}
+          ItemSeparatorComponent={this.ListViewItemSeparator}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={{ backgroundColor: 'white', padding: 20 }}>
+              <Text>Id: {item.id}</Text>
+              <Text>titulo: {item.titulo}</Text>
+              <Text>descricao: {item.descricao}</Text>
+              <Text>localizacao: {item.localizacao}</Text>
+              <Button
+                onPress={() => {
+                  this.props.navigation.navigate('ListDetails');
+                }}
+                color="orange"
+                title={translate("Detalhes")}
+              />
+            </View>
+          )}
+        />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  MainContainer :{
+     flex:1,
+     justifyContent: 'center',
+     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+     margin: 10
+  },
+  TextInputStyle:
+   {
+     borderWidth: 1,
+     borderColor: '#009688',
+     width: '100%',
+     height: 40,
+     borderRadius: 10,
+     marginBottom: 10,
+     textAlign: 'center',
+   },
+   button: {
+     width: '100%',
+     height: 40,
+     padding: 10,
+     backgroundColor: '#4CAF50',
+     borderRadius:7,
+     marginTop: 12
+   },
+   TextStyle:{
+     color:'#fff',
+     textAlign:'center',
+   },
+   textViewContainer: {
+     textAlignVertical:'center',
+     padding:10,
+     fontSize: 20,
+     color: '#000',
+    }
+ });
 
 const portraitStyles = StyleSheet.create({
   container: {
@@ -152,6 +219,13 @@ const portraitStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  },
+  MainContainer :{
+    flex:1,
+    justifyContent: 'center',
+    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+    margin: 10,
+    flexDirection: 'column',
   },
 });
    
@@ -201,5 +275,12 @@ const landscapeStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  },
+  MainContainer :{
+     flex:1,
+     justifyContent: 'center',
+     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+     margin: 10,
+     flexDirection: 'row',
   },
 });

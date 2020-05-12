@@ -160,8 +160,6 @@ export default class InsertReport extends React.Component{
                 underlineColorAndroid = "transparent"
                 onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
           />
-        </View>
-        <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
           <TouchableOpacity 
             onPress={this.addRegisto} 
             activeOpacity={0.7} 
