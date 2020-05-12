@@ -19,8 +19,12 @@ import {
   TouchableOpacity, 
   Alert, 
   YellowBox,
-  ListView
+  ListView,
+  FlatList 
 } from 'react-native';
+
+import Realm from 'realm';
+let realm;
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -55,13 +59,23 @@ export default class List extends React.Component{
     super(props);
     setI18nConfig(); // set initial config
 
+    realm = new Realm({ path: 'reports.realm' });
+    var reports = realm.objects('report');
+
     this.state = {
       screen: Dimensions.get('window'),
       titulo : '',
       descricao : '',
       localizacao : '',
+      FlatListItems: reports,
     };
   }
+
+  ListViewItemSeparator = () => {
+    return (
+      <View style={{ height: 0.5, width: '100%', backgroundColor: '#000' }} />
+    );
+  };
   
   // Multi-língua
   componentDidMount() {
@@ -109,10 +123,67 @@ export default class List extends React.Component{
             title={translate("Detalhes")}
           />
         </View>
+
+
+        <View style = { styles.MainContainer }>
+          <FlatList
+            data={this.state.FlatListItems}
+            ItemSeparatorComponent={this.ListViewItemSeparator}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={{ backgroundColor: 'white', padding: 20 }}>
+                <Text>Id: {item.id}</Text>
+                <Text>titulo: {item.titulo}</Text>
+                <Text>descricao: {item.descricao}</Text>
+                <Text>localizacao: {item.localizacao}</Text>
+              </View>
+            )}
+          />
+        </View>
+
+
+
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  MainContainer :{
+     flex:1,
+     justifyContent: 'center',
+     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+     margin: 10
+  },
+  TextInputStyle:
+   {
+     borderWidth: 1,
+     borderColor: '#009688',
+     width: '100%',
+     height: 40,
+     borderRadius: 10,
+     marginBottom: 10,
+     textAlign: 'center',
+   },
+   button: {
+     width: '100%',
+     height: 40,
+     padding: 10,
+     backgroundColor: '#4CAF50',
+     borderRadius:7,
+     marginTop: 12
+   },
+   TextStyle:{
+     color:'#fff',
+     textAlign:'center',
+   },
+   textViewContainer: {
+     textAlignVertical:'center',
+     padding:10,
+     fontSize: 20,
+     color: '#000',
+    }
+ });
 
 const portraitStyles = StyleSheet.create({
   container: {
