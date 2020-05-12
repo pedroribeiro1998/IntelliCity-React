@@ -73,7 +73,7 @@ export default class List extends React.Component{
 
   ListViewItemSeparator = () => {
     return (
-      <View style={{ height: 0.5, width: '100%', backgroundColor: '#000' }} />
+      <View style={{ height: 2, width: '100%', backgroundColor: '#000' }} />
     );
   };
   
@@ -118,18 +118,28 @@ export default class List extends React.Component{
           ItemSeparatorComponent={this.ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View style={{ backgroundColor: 'white', padding: 20 }}>
-              <Text>Id: {item.id}</Text>
-              <Text>titulo: {item.titulo}</Text>
-              <Text>descricao: {item.descricao}</Text>
-              <Text>localizacao: {item.localizacao}</Text>
-              <Button
-                onPress={() => {
-                  this.props.navigation.navigate('ListDetails');
-                }}
-                color="orange"
-                title={translate("Detalhes")}
-              />
+            <View style={{
+              flex: 1,
+              flexDirection: 'row',
+              backgroundColor: 'lightblue'
+            }}>
+              <Image
+                source={require('../Images/map.png')}
+                style={{width: 100, height: 100, margin: 10}} >
+              </Image>
+              <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
+                <Text>Id: {item.id}</Text>
+                <Text>titulo: {item.titulo}</Text>
+                <Text>descricao: {item.descricao}</Text>
+                <Text>localizacao: {item.localizacao}</Text>
+                <Button
+                  onPress={() => {
+                    this.props.navigation.navigate('ListDetails');
+                  }}
+                  color="darkgrey"
+                  title={translate("Detalhes")}
+                />
+              </View>
             </View>
           )}
         />
@@ -138,42 +148,6 @@ export default class List extends React.Component{
   }
 }
 
-const styles = StyleSheet.create({
-  MainContainer :{
-     flex:1,
-     justifyContent: 'center',
-     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-     margin: 10
-  },
-  TextInputStyle:
-   {
-     borderWidth: 1,
-     borderColor: '#009688',
-     width: '100%',
-     height: 40,
-     borderRadius: 10,
-     marginBottom: 10,
-     textAlign: 'center',
-   },
-   button: {
-     width: '100%',
-     height: 40,
-     padding: 10,
-     backgroundColor: '#4CAF50',
-     borderRadius:7,
-     marginTop: 12
-   },
-   TextStyle:{
-     color:'#fff',
-     textAlign:'center',
-   },
-   textViewContainer: {
-     textAlignVertical:'center',
-     padding:10,
-     fontSize: 20,
-     color: '#000',
-    }
- });
 
 const portraitStyles = StyleSheet.create({
   container: {
