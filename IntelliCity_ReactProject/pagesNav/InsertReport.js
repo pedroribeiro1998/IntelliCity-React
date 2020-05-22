@@ -130,23 +130,20 @@ export default class InsertReport extends React.Component{
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
-          <Text 
-            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> InsertReport
-          </Text>
           <TextInput
-              placeholder="Inserir titulo"
+              placeholder={translate("TituloTextInput")}
               style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
               underlineColorAndroid = "transparent"
               onChangeText = { ( text ) => { this.setState({ titulo: text })} }
           />
           <TextInput
-                placeholder="Inserir descricao"
+                placeholder={translate("DescricaoTextInput")}
                 style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
                 underlineColorAndroid = "transparent"
                 onChangeText = { ( text ) => { this.setState({ descricao: text })} }
           />
           <TextInput
-                placeholder="Inserir localizacao"
+                placeholder={translate("LocalizationTextInput")}
                 style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
                 underlineColorAndroid = "transparent"
                 onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
@@ -158,7 +155,8 @@ export default class InsertReport extends React.Component{
             activeOpacity={0.7} 
             style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
             <Text 
-              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> Adicionar </Text>
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("AddButton")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -230,6 +228,7 @@ const portraitStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });
    
@@ -299,5 +298,6 @@ const landscapeStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });

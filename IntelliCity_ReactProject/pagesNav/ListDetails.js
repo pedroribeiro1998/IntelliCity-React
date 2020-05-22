@@ -171,21 +171,21 @@ export default class ListDetails extends React.Component{
         <TextInput>{this.state.id}</TextInput>
 
         <TextInput
-          placeholder="Inserir titulo"
+          placeholder={translate("TituloTextInput")}
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
           value={this.state.titulo}
           onChangeText = { ( text ) => { this.setState({ titulo: text })} }
         />
         <TextInput
-          placeholder="Inserir descricao"
+          placeholder={translate("DescricaoTextInput")}
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
           value={this.state.descricao}
           onChangeText = { ( text ) => { this.setState({ descricao: text })} }
         />
         <TextInput
-          placeholder="Inserir localizacao"
+          placeholder={translate("LocalizationTextInput")}
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
           value={this.state.localizacao}
@@ -196,13 +196,16 @@ export default class ListDetails extends React.Component{
           activeOpacity={0.7} 
           style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
           <Text 
-            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> Atualizar </Text>
+            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("UpdateButton")}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           onPress={this.deleteRegisto}
           activeOpacity={0.7} 
           style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-          <Text style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> Apagar </Text>
+          <Text 
+            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("DeleteButton")}</Text>
          </TouchableOpacity>
      </View>
    );
@@ -273,6 +276,7 @@ const portraitStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });
    
@@ -342,5 +346,6 @@ const landscapeStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });
