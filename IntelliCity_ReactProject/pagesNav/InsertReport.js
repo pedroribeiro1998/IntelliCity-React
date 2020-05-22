@@ -19,7 +19,8 @@ import {
   TouchableOpacity, 
   Alert, 
   YellowBox,
-  ListView
+  ListView,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import Realm from 'realm';
@@ -65,7 +66,6 @@ export default class InsertReport extends React.Component{
       localizacao : '',
     };
 
-    
     realm = new Realm({
       path: 'reports.realm', //nome da bd
       schema: [{
@@ -113,11 +113,6 @@ export default class InsertReport extends React.Component{
   }
   // Portrait e Landscape
 
-  show_count=()=>{
-    var ID = realm.objects('report').length;
-    Alert.alert("contagem: " + ID);
-  }
-
   addRegisto=()=>{
     realm.write(() => {
       var ID = realm.objects('report').length + 1;
@@ -129,10 +124,6 @@ export default class InsertReport extends React.Component{
         });
     });
     Alert.alert("Report inserido com sucesso!");
-  }
-
-  GoToListagem = () => {
-    this.props.navigation.navigate('List');
   }
 
   render(){
@@ -166,20 +157,6 @@ export default class InsertReport extends React.Component{
             style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
             <Text 
               style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> Adicionar </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={this.show_count} 
-            activeOpacity={0.7} 
-            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-            <Text 
-              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> CONTAGEM </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={this.GoToListagem} 
-            activeOpacity={0.7} 
-            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-            <Text 
-              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> LISTAGEM </Text>
           </TouchableOpacity>
         </View>
       </View>
