@@ -70,6 +70,14 @@ export default class List extends React.Component{
       localizacao : '',
       FlatListItems: reports,
     };
+
+    realm.addListener('change', () => {
+      this.reloadData();
+    });
+  }
+
+  reloadData = () => {
+    this.setState({FlatListItems: realm.objects('report')});
   }
 
   ListViewItemSeparator = () => {
