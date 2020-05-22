@@ -152,7 +152,9 @@ export default class InsertReport extends React.Component{
                 onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
           />
           <TouchableOpacity 
-            onPress={this.addRegisto} 
+            onPress={
+              this.addRegisto
+            } 
             activeOpacity={0.7} 
             style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
             <Text 

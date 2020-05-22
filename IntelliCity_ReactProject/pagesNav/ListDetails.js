@@ -61,10 +61,10 @@ export default class ListDetails extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
+      id: this.props.route.params.id,
       titulo : this.props.route.params.titulo,
       descricao : this.props.route.params.descricao,
       localizacao : this.props.route.params.localizacao,
-      id: this.props.route.params.id,
     };
     realm = new Realm({ path: 'reports.realm' });
 
@@ -105,8 +105,43 @@ export default class ListDetails extends React.Component{
 
   // update e delete
   updateRegisto=()=>{
-    Alert.alert("Registo atualizado com sucesso.");
-    this.props.navigation.goBack();
+    var that = this;
+    if (this.state.titulo) {
+      if (this.state.descricao) {
+        if (this.state.localizacao) {
+          realm.write(() => {
+            var obj = realm
+              .objects('report')
+              .filtered('id =' + this.state.id);
+            if (obj.length > 0) {
+              obj[0].titulo = this.state.titulo;
+              obj[0].descricao = this.state.descricao;
+              obj[0].localizacao = this.state.localizacao;
+              Alert.alert(
+                'Info',
+                'Registo atualizado com sucesso',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () =>
+                      that.props.navigation.goBack(),
+                  },
+                ],
+                { cancelable: false }
+              );
+            } else {
+              alert('Atualização falhou');
+            }
+          });
+        } else {
+          alert('Preencha o localizacao');
+        }
+      } else {
+        alert('Preencha a descricao');
+      }
+    } else {
+      alert('Preencha o titulo');
+    }
   }
 
   deleteRegisto=()=>{
@@ -122,8 +157,8 @@ export default class ListDetails extends React.Component{
 
   deleteReport = () => {
     realm.write(() => {
-      const { id } = this.props.route.params;
-      let task = realm.objects('report').filtered('id = ' + id);
+      //const { id } = this.props.route.params;
+      let task = realm.objects('report').filtered('id = ' + this.state.id);
       realm.delete(task);
     });
     this.props.navigation.goBack();
@@ -133,9 +168,7 @@ export default class ListDetails extends React.Component{
   render() {    
     return (
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
-        <TextInput
-          placeholder="Inserir titulo"
-        >{id}</TextInput>
+        <TextInput>{this.state.id}</TextInput>
 
         <TextInput
           placeholder="Inserir titulo"
