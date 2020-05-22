@@ -111,7 +111,7 @@ export default class ListDetails extends React.Component{
   deleteRegisto=()=>{
     Alert.alert(
       'Info',
-      'Tem a certeza que pretende remover este registo?',
+      'Tem a certeza que pretende remover este report?',
     [
       {text: 'Não', onPress: () => console.log('Pedido cancelado'), style: 'cancel'},
       {text: 'Sim', onPress: () => {this.deleteUser();}},
@@ -122,49 +122,48 @@ export default class ListDetails extends React.Component{
   deleteUser = () => {
     realm.write(() => {
       const { id } = this.props.route.params;
-      let task = realm.objects('pessoa').filtered('id = ' + id);
+      let task = realm.objects('report').filtered('id = ' + id);
       realm.delete(task);
     });
     this.props.navigation.goBack();
   }
   // update e delete
 
-  render(){
-    return(
-      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
-        <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
-          <Text 
-            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> InsertReport
-          </Text>
-          <TextInput
-              placeholder="Inserir titulo"
-              style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-              underlineColorAndroid = "transparent"
-              onChangeText = { ( text ) => { this.setState({ titulo: text })} }
-          />
-          <TextInput
-                placeholder="Inserir descricao"
-                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-                underlineColorAndroid = "transparent"
-                onChangeText = { ( text ) => { this.setState({ descricao: text })} }
-          />
-          <TextInput
-                placeholder="Inserir localizacao"
-                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-                underlineColorAndroid = "transparent"
-                onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
-          />
-          <TouchableOpacity 
-            onPress={this.addRegisto} 
-            activeOpacity={0.7} 
-            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-            <Text 
-              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}> Adicionar </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+  render() {
+    const { id } = this.props.route.params;
+    
+    return (
+     <View style={styles.MainContainer}>
+       <TextInput
+        placeholder="Inserir nome"
+       >{id}</TextInput>
+       <TextInput
+             placeholder="Inserir nome"
+             style = { styles.TextInputStyle }
+             underlineColorAndroid = "transparent"
+             onChangeText = { ( text ) => { this.setState({ nome: text })} }
+       />
+       <TextInput
+             placeholder="Inserir cidade"
+             style = { styles.TextInputStyle }
+             underlineColorAndroid = "transparent"
+             onChangeText = { ( text ) => { this.setState({ cidade: text })} }
+       />
+       <TextInput
+             placeholder="Inserir telefone"
+             style = { styles.TextInputStyle }
+             underlineColorAndroid = "transparent"
+             onChangeText = { ( text ) => { this.setState({ telefone: text })} }
+       />
+       <TouchableOpacity onPress={this.updateRegisto} activeOpacity={0.7} style={styles.button} >
+          <Text style={styles.TextStyle}> Atualizar </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.deleteRegisto} activeOpacity={0.7} style={styles.button} >
+           <Text style={styles.TextStyle}> Apagar </Text>
+         </TouchableOpacity>
+     </View>
+   );
+ }
 }
 
 const portraitStyles = StyleSheet.create({
