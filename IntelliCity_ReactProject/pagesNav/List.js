@@ -121,7 +121,7 @@ export default class List extends React.Component{
 
 
   actionOnRow(item) {
-    this.props.navigation.navigate('ListDetails', {id: item.id});
+    this.props.navigation.navigate('ListDetails', item);
  }
 
   render(){

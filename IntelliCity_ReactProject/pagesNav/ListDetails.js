@@ -61,9 +61,10 @@ export default class ListDetails extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
-      titulo : '',
-      descricao : '',
-      localizacao : '',
+      titulo : this.props.route.params.titulo,
+      descricao : this.props.route.params.descricao,
+      localizacao : this.props.route.params.localizacao,
+      id: this.props.route.params.id,
     };
     realm = new Realm({ path: 'reports.realm' });
 
@@ -129,11 +130,9 @@ export default class ListDetails extends React.Component{
   }
   // update e delete
 
-  render() {
-    const { id } = this.props.route.params;
-    
+  render() {    
     return (
-      <View style={styles.MainContainer}>
+      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <TextInput
           placeholder="Inserir titulo"
         >{id}</TextInput>
@@ -142,18 +141,21 @@ export default class ListDetails extends React.Component{
           placeholder="Inserir titulo"
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
+          value={this.state.titulo}
           onChangeText = { ( text ) => { this.setState({ titulo: text })} }
         />
         <TextInput
           placeholder="Inserir descricao"
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
+          value={this.state.descricao}
           onChangeText = { ( text ) => { this.setState({ descricao: text })} }
         />
         <TextInput
           placeholder="Inserir localizacao"
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           underlineColorAndroid = "transparent"
+          value={this.state.localizacao}
           onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
         />
         <TouchableOpacity 
