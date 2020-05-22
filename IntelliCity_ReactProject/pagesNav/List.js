@@ -20,7 +20,8 @@ import {
   Alert, 
   YellowBox,
   ListView,
-  FlatList 
+  FlatList ,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import Realm from 'realm';
@@ -110,6 +111,11 @@ export default class List extends React.Component{
   }
   // Portrait e Landscape
 
+
+  actionOnRow(item) {
+    this.props.navigation.navigate('ListDetails', {id: item.id});
+ }
+
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
@@ -118,29 +124,24 @@ export default class List extends React.Component{
           ItemSeparatorComponent={this.ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View style={{
-              flex: 1,
-              flexDirection: 'row',
-              backgroundColor: 'lightblue'
-            }}>
-              <Image
-                source={require('../Images/map.png')}
-                style={{width: 100, height: 100, margin: 10}} >
-              </Image>
-              <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
-                <Text>Id: {item.id}</Text>
-                <Text>titulo: {item.titulo}</Text>
-                <Text>descricao: {item.descricao}</Text>
-                <Text>localizacao: {item.localizacao}</Text>
-                <Button
-                  onPress={() => {
-                    this.props.navigation.navigate('ListDetails');
-                  }}
-                  color="darkgrey"
-                  title={translate("Detalhes")}
-                />
+            <TouchableWithoutFeedback onPress={ () => this.actionOnRow(item)}>
+              <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                backgroundColor: 'lightblue'
+              }}>
+                <Image
+                  source={require('../Images/map.png')}
+                  style={{width: 100, height: 100, margin: 10}} >
+                </Image>
+                <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
+                  <Text>Id: {item.id}</Text>
+                  <Text>titulo: {item.titulo}</Text>
+                  <Text>descricao: {item.descricao}</Text>
+                  <Text>localizacao: {item.localizacao}</Text>
+                </View>
               </View>
-            </View>
+            </TouchableWithoutFeedback>
           )}
         />
       </View>
