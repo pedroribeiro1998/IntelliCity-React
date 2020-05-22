@@ -70,6 +70,14 @@ export default class List extends React.Component{
       localizacao : '',
       FlatListItems: reports,
     };
+
+    realm.addListener('change', () => {
+      this.reloadData();
+    });
+  }
+
+  reloadData = () => {
+    this.setState({FlatListItems: realm.objects('report')});
   }
 
   ListViewItemSeparator = () => {
@@ -113,7 +121,7 @@ export default class List extends React.Component{
 
 
   actionOnRow(item) {
-    this.props.navigation.navigate('ListDetails', {id: item.id});
+    this.props.navigation.navigate('ListDetails', item);
  }
 
   render(){

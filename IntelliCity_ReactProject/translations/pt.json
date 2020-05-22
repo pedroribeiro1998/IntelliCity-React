@@ -12,5 +12,11 @@
     "NomeTextInput": "Nome",
     "ReportsListNavBar": "Lista de Reports",
     "MapaNavBar": "Mapa",
-    "Detalhes": "Detalhes"
+    "Detalhes": "Detalhes",
+    "TituloTextInput": "Titulo",
+    "DescricaoTextInput": "Descricao",
+    "LocalizationTextInput": "Localização",
+    "UpdateButton": "Atualizar",
+    "DeleteButton": "Apagar",
+    "AddButton": "Adicionar"
   }

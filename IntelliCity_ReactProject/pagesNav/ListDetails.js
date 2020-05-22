@@ -61,9 +61,10 @@ export default class ListDetails extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
-      titulo : '',
-      descricao : '',
-      localizacao : '',
+      id: this.props.route.params.id,
+      titulo : this.props.route.params.titulo,
+      descricao : this.props.route.params.descricao,
+      localizacao : this.props.route.params.localizacao,
     };
     realm = new Realm({ path: 'reports.realm' });
 
@@ -104,8 +105,43 @@ export default class ListDetails extends React.Component{
 
   // update e delete
   updateRegisto=()=>{
-    Alert.alert("Registo atualizado com sucesso.");
-    this.props.navigation.goBack();
+    var that = this;
+    if (this.state.titulo) {
+      if (this.state.descricao) {
+        if (this.state.localizacao) {
+          realm.write(() => {
+            var obj = realm
+              .objects('report')
+              .filtered('id =' + this.state.id);
+            if (obj.length > 0) {
+              obj[0].titulo = this.state.titulo;
+              obj[0].descricao = this.state.descricao;
+              obj[0].localizacao = this.state.localizacao;
+              Alert.alert(
+                'Info',
+                'Registo atualizado com sucesso',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () =>
+                      that.props.navigation.goBack(),
+                  },
+                ],
+                { cancelable: false }
+              );
+            } else {
+              alert('Atualização falhou');
+            }
+          });
+        } else {
+          alert('Preencha o localizacao');
+        }
+      } else {
+        alert('Preencha a descricao');
+      }
+    } else {
+      alert('Preencha o titulo');
+    }
   }
 
   deleteRegisto=()=>{
@@ -114,52 +150,62 @@ export default class ListDetails extends React.Component{
       'Tem a certeza que pretende remover este report?',
     [
       {text: 'Não', onPress: () => console.log('Pedido cancelado'), style: 'cancel'},
-      {text: 'Sim', onPress: () => {this.deleteUser();}},
+      {text: 'Sim', onPress: () => {this.deleteReport();}},
     ]
     );
   }
 
-  deleteUser = () => {
+  deleteReport = () => {
     realm.write(() => {
-      const { id } = this.props.route.params;
-      let task = realm.objects('report').filtered('id = ' + id);
+      //const { id } = this.props.route.params;
+      let task = realm.objects('report').filtered('id = ' + this.state.id);
       realm.delete(task);
     });
     this.props.navigation.goBack();
   }
   // update e delete
 
-  render() {
-    const { id } = this.props.route.params;
-    
+  render() {    
     return (
-     <View style={styles.MainContainer}>
-       <TextInput
-        placeholder="Inserir nome"
-       >{id}</TextInput>
-       <TextInput
-             placeholder="Inserir nome"
-             style = { styles.TextInputStyle }
-             underlineColorAndroid = "transparent"
-             onChangeText = { ( text ) => { this.setState({ nome: text })} }
-       />
-       <TextInput
-             placeholder="Inserir cidade"
-             style = { styles.TextInputStyle }
-             underlineColorAndroid = "transparent"
-             onChangeText = { ( text ) => { this.setState({ cidade: text })} }
-       />
-       <TextInput
-             placeholder="Inserir telefone"
-             style = { styles.TextInputStyle }
-             underlineColorAndroid = "transparent"
-             onChangeText = { ( text ) => { this.setState({ telefone: text })} }
-       />
-       <TouchableOpacity onPress={this.updateRegisto} activeOpacity={0.7} style={styles.button} >
-          <Text style={styles.TextStyle}> Atualizar </Text>
+      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
+        <TextInput>{this.state.id}</TextInput>
+
+        <TextInput
+          placeholder={translate("TituloTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.titulo}
+          onChangeText = { ( text ) => { this.setState({ titulo: text })} }
+        />
+        <TextInput
+          placeholder={translate("DescricaoTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.descricao}
+          onChangeText = { ( text ) => { this.setState({ descricao: text })} }
+        />
+        <TextInput
+          placeholder={translate("LocalizationTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.localizacao}
+          onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
+        />
+        <TouchableOpacity 
+          onPress={this.updateRegisto} 
+          activeOpacity={0.7} 
+          style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+          <Text 
+            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("UpdateButton")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.deleteRegisto} activeOpacity={0.7} style={styles.button} >
-           <Text style={styles.TextStyle}> Apagar </Text>
+        <TouchableOpacity 
+          onPress={this.deleteRegisto}
+          activeOpacity={0.7} 
+          style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+          <Text 
+            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("DeleteButton")}</Text>
          </TouchableOpacity>
      </View>
    );
@@ -230,6 +276,7 @@ const portraitStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });
    
@@ -299,5 +346,6 @@ const landscapeStyles = StyleSheet.create({
   TouchableOpacityText: {
     color: 'black',
     fontSize: 15,
+    textAlign: 'center',
   },
 });
