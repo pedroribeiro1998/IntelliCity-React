@@ -69,6 +69,7 @@ export default class List extends React.Component{
       descricao : '',
       localizacao : '',
       FlatListItems: reports,
+      WSreports: [],
     };
 
     realm.addListener('change', () => {
@@ -85,10 +86,31 @@ export default class List extends React.Component{
       <View style={{ height: 2, width: '100%', backgroundColor: '#000' }} />
     );
   };
+
+  GetAllReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe', {
+      method: "GET",//Request Type 
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      if (responseJson[0]) {
+        this.setState({WSreports: JSON.parse(responseJson.DATA)});
+      }
+      alert(JSON.stringify(responseJson.DATA));
+      console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
   
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    this.GetAllReports;
   }
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
@@ -119,7 +141,6 @@ export default class List extends React.Component{
   }
   // Portrait e Landscape
 
-
   actionOnRow(item) {
     this.props.navigation.navigate('ListDetails', item);
  }
@@ -127,6 +148,24 @@ export default class List extends React.Component{
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+        <Button
+            onPress={this.GetAllReports}
+            color="blue"
+            title="Database reports"
+          />
+        
+        <FlatList
+           data= {this.state.WSreports}
+           renderItem={({ item }) => (
+             <TouchableOpacity >
+                <Text>Nome: {item.nome}</Text>
+                <Text>titulo: {item.titulo}</Text>
+            </TouchableOpacity>
+           )}
+           keyExtractor= {item=>item.id}
+        />
+
+          
         <FlatList
           data={this.state.FlatListItems}
           ItemSeparatorComponent={this.ListViewItemSeparator}
