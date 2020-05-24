@@ -154,6 +154,16 @@ export default class List extends React.Component{
             title="Database reports"
           />
         
+        <FlatList
+           data= {this.state.WSreports}
+           renderItem={({ item }) => (
+             <TouchableOpacity >
+                <Text>Nome: {item.nome}</Text>
+                <Text>titulo: {item.titulo}</Text>
+            </TouchableOpacity>
+           )}
+           keyExtractor= {item=>item.id}
+        />
 
           
         <FlatList
