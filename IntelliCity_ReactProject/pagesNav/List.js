@@ -88,15 +88,11 @@ export default class List extends React.Component{
   };
 
   GetAllReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe', {
-      method: "GET",//Request Type 
-    })
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe')
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
-      if (responseJson[0]) {
-        this.setState({WSreports: JSON.parse(responseJson.DATA)});
-      }
+      this.setState({WSreports: responseJson.DATA});
       alert(JSON.stringify(responseJson.DATA));
       console.log(responseJson);
     })
@@ -110,7 +106,7 @@ export default class List extends React.Component{
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
-    this.GetAllReports;
+    this.GetAllReports();
   }
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
@@ -148,12 +144,7 @@ export default class List extends React.Component{
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
-        <Button
-            onPress={this.GetAllReports}
-            color="blue"
-            title="Database reports"
-          />
-        
+
         <FlatList
            data= {this.state.WSreports}
            renderItem={({ item }) => (
