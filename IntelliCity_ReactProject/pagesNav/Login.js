@@ -3,6 +3,9 @@ import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
+import {PostRequest} from '../services/webservices/Post';
+import Realm from 'realm';
+let realm;
 
 import {
   I18nManager,
@@ -15,6 +18,8 @@ import {
   Button,
   TextInput,
   Dimensions,
+  ToastAndroid,
+  TouchableOpacity,
 } from 'react-native';
 
 const translationGetters = {
@@ -54,7 +59,24 @@ export default class LoginScreen extends React.Component{
       screen: Dimensions.get('window'),
       username: '',
       password: '',
+      loading: false,
     };
+
+    realm = new Realm({
+      path: 'utilizador.realm', //nome da bd
+      schema: [{
+        name: 'utilizador',
+        properties: {
+          id: {type: 'int',   default: 0},
+          id_user: {type: 'int', default: 0},
+          nome: 'string',
+          username: 'string',
+          password: 'string',
+          data_nasc: 'string',
+          morada: 'string',
+        }
+      }]
+    });
   }
   
   componentDidMount() {
@@ -90,6 +112,50 @@ export default class LoginScreen extends React.Component{
     this.setState({screen: Dimensions.get('window')});
   }
 
+  ExecuteLogin = () => {
+    //this.setState({loading: true});
+    let arr = {username: this.state.username, password: this.state.password};
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/loginUser', {
+      method: "POST",//Request Type 
+      body: JSON.stringify(arr), //post body
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      if (responseJson.data.username && responseJson.data.password) {
+        alert('Login efetuado com sucesso!');
+        realm.write(() => {
+          let ID = realm.objects('utilizador').length + 1;
+          realm.create('utilizador', {
+            id: ID,
+            id_user: parseInt(responseJson.data.id),
+            nome: responseJson.data.nome,
+            username: responseJson.data.username,
+            password: responseJson.data.password,
+            data_nasc: responseJson.data.data_nasc,
+            morada: responseJson.data.morada,
+          });
+        });
+        this.props.navigation.navigate('DrawerRoute', {
+          //id_utilizador: responseJson.data.id,
+          username: responseJson.data.username,
+          //nome: responseJson.data.nome,
+        });
+      } else if (responseJson.status === 'false') {
+        alert('errado!');
+      }else{
+        alert('Credenciais Erradas, tente novamente!');
+      }
+      //alert(JSON.stringify(responseJson));
+      console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  };
+
   render(){
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
@@ -112,18 +178,7 @@ export default class LoginScreen extends React.Component{
         />
         <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
           <Button
-
-            onPress={() => {
-              this.props.navigation.navigate('DrawerRoute');
-            }}
-            /*
-            onPress={() => {
-              this.props.navigation.navigate('Map_Screen', {
-                username: this.state.username, 
-                password: this.state.password
-              });
-            }}
-            */
+            onPress={this.ExecuteLogin}
             color="blue"
             title={translate("LoginButton")}
           />
