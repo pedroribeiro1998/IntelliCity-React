@@ -1,16 +1,250 @@
-/*Home Screen With buttons to navigate to diffrent options*/
-import React from 'react';
-import { View, Text, Button, SafeAreaView, Image } from 'react-native';
+import * as React from 'react';
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+import { StackActions } from '@react-navigation/native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
- function Map({ navigation }) {
-   return (
-       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-         <Text>map main...</Text>
-         <Button
-           onPress={() => navigation.navigate('AddNewToMap')}
-           title="Add new to map"
-         />
-     </View>
-   );
- }
-export default Map;
+import {
+  I18nManager,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Button,
+  TextInput,
+  Dimensions,
+  Platform,
+  TouchableOpacity, 
+  Alert, 
+  YellowBox,
+  ListView,
+  FlatList ,
+  TouchableWithoutFeedback
+} from 'react-native';
+
+import Realm from 'realm';
+let realm;
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("../translations/en.json"),
+  pt: () => require("../translations/pt.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
+
+export default class Map extends React.Component{
+  constructor(props) {
+    super(props);
+    setI18nConfig(); // set initial config
+
+    this.state = {
+      screen: Dimensions.get('window'),
+    };
+
+  }
+  
+  // Multi-língua
+  componentDidMount() {
+    RNLocalize.addEventListener("change", this.handleLocalizationChange);
+  }
+  componentWillUnmount() {
+    RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+  }
+  handleLocalizationChange = () => {
+    setI18nConfig();
+    this.forceUpdate();
+  };
+  // Multi-língua
+  
+  // Portrait e Landscape
+  getOrientation(){
+    if (this.state.screen.width > this.state.screen.height) {
+      return 'LANDSCAPE';
+    }else {
+      return 'PORTRAIT';
+    }
+  }
+  getStyle(){
+    if (this.getOrientation() === 'LANDSCAPE') {
+      return landscapeStyles;
+    } else {
+      return portraitStyles;
+    }
+  }
+  onLayout(){
+    this.setState({screen: Dimensions.get('window')});
+  }
+  // Portrait e Landscape
+ /*
+ <Button
+  onPress={() => this.props.navigation.navigate('AddNewToMap')}
+  title="Add new to map"
+  />
+*/
+  render(){
+    return(
+      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+          <MapView
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
+            region={{
+              latitude: 41.69137327,
+              longitude: -8.82829785,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }}
+          >
+          </MapView>
+
+      </View>
+    );
+  }
+}
+
+
+const portraitStyles = StyleSheet.create({
+  containerMap: {
+    ...StyleSheet.absoluteFillObject,
+    height: '100%',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  part1: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  part2: {
+    flex: 2,
+    backgroundColor: 'white',
+  },
+  part3: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'flex-end',
+    margin: 10,
+  },
+  buttonview: {
+    flex: 1,
+    margin: 10,
+  },
+  text: {
+    color: 'black',
+    fontSize: 25,
+  },
+  textinput: {
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 10,
+  },
+  textinput2: {
+    height: 40,
+    margin: 10,
+  },
+  image: {
+    flex: 1,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+  },
+  MainContainer :{
+    flex:1,
+    justifyContent: 'center',
+    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+
+    flexDirection: 'column',
+  },
+});
+   
+const landscapeStyles = StyleSheet.create({
+  containerMap: {
+    ...StyleSheet.absoluteFillObject,
+    height: '100%',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  part1: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  part2: {
+    flex: 2,
+    backgroundColor: 'white',
+  },
+  part3: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'flex-end',
+    margin: 10,
+  },
+  buttonview: {
+    flex: 1,
+    margin: 10,
+    borderColor: 'black',
+  },
+  text: {
+    color: 'black',
+    fontSize: 25,
+  },
+  textinput: {
+    height: 40,
+    borderColor: 'black',
+    //backgroundColor: 'grey',
+    borderWidth: 1,
+    margin: 10,
+  },
+  textinput2: {
+    height: 40,
+    margin: 10,
+  },
+  image: {
+    flex: 1,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+  },
+  MainContainer :{
+     flex:1,
+     justifyContent: 'center',
+     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+     flexDirection: 'row',
+  },
+});
