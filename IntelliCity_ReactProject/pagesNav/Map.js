@@ -3,7 +3,7 @@ import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Callout, Polygon, Circle } from 'react-native-maps';
 
 import {
   I18nManager,
@@ -63,6 +63,9 @@ export default class Map extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
+      data: [],
+      latitude: null,
+      longitude: null,
     };
 
   }
@@ -70,6 +73,7 @@ export default class Map extends React.Component{
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    this.GetAllReports();
   }
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
@@ -99,6 +103,24 @@ export default class Map extends React.Component{
     this.setState({screen: Dimensions.get('window')});
   }
   // Portrait e Landscape
+
+  GetAllReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({data: responseJson.DATA});
+      alert(JSON.stringify(responseJson.DATA));
+      console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
+
+
  /*
  <Button
   onPress={() => this.props.navigation.navigate('AddNewToMap')}
@@ -112,12 +134,30 @@ export default class Map extends React.Component{
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
             region={{
-              latitude: 41.69137327,
-              longitude: -8.82829785,
+              latitude: 41.63683902,
+              longitude: -8.75321746,
               latitudeDelta: 0.015,
               longitudeDelta: 0.0121,
             }}
           >
+
+          {
+            this.state.data.map(marker => (
+              <Marker
+                key={marker.id}
+                coordinate={
+                  {
+                    latitude: parseFloat(marker.latitude),
+                    longitude: parseFloat(marker.longitude)
+                  }
+                }>
+                    <Callout>
+                      <Text>{marker.titulo} - {marker.descricao}</Text>
+                    </Callout>
+              </Marker>
+            ))
+          }
+          
           </MapView>
 
       </View>
