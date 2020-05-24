@@ -24,8 +24,8 @@ function decrypt(text) {
     return encrypted;
   }
   
-  export function PostData(type, userData) {
-    let BaseURL = 'https://cmapi2020.000webhostapp.com/smart/';
+  export function PostRequest(type, userData) {
+    let BaseURL = 'https://intellicity.000webhostapp.com/myslim_commov1920/api/';
     let encrypted = {msg: encrypt(JSON.stringify(userData))};
   
     return new Promise((resolve, reject) => {
