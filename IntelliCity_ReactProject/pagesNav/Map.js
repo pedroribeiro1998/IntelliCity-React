@@ -110,7 +110,7 @@ export default class Map extends React.Component{
     //If response is in json then in success
     .then((responseJson) => {
       this.setState({data: responseJson.DATA});
-      alert(JSON.stringify(responseJson.DATA));
+      //alert(JSON.stringify(responseJson.DATA));
       console.log(responseJson);
     })
     //If response is not in json then in error

@@ -93,7 +93,7 @@ export default class List extends React.Component{
     //If response is in json then in success
     .then((responseJson) => {
       this.setState({WSreports: responseJson.DATA});
-      alert(JSON.stringify(responseJson.DATA));
+      //alert(JSON.stringify(responseJson.DATA));
       console.log(responseJson);
     })
     //If response is not in json then in error
@@ -141,11 +141,8 @@ export default class List extends React.Component{
     this.props.navigation.navigate('ListDetails', item);
  }
 
-  render(){
-    return(
-      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
-
-        <FlatList
+ /*
+         <FlatList
            data= {this.state.WSreports}
            renderItem={({ item }) => (
              <TouchableOpacity >
@@ -155,6 +152,12 @@ export default class List extends React.Component{
            )}
            keyExtractor= {item=>item.id}
         />
+ */
+  render(){
+    return(
+      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+
+
 
           
         <FlatList
