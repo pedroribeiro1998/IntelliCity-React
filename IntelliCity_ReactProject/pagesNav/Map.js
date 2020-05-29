@@ -4,6 +4,7 @@ import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout, Polygon, Circle } from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 
 import {
   I18nManager,
@@ -66,23 +67,71 @@ export default class Map extends React.Component{
       data: [],
       latitude: null,
       longitude: null,
+      initialPosition: {
+        latitude: 41.693447,
+        longitude: -8.846955,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      },
+      markerPosition: {
+        latitude: 0,
+        longitude: 0,
+      }
     };
-
   }
+
+  watchID: ?number = null
   
-  // Multi-língua
   componentDidMount() {
+    // Multi-língua
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    //Get reports from API
     this.GetAllReports();
+    //Geolocation
+    Geolocation.getCurrentPosition(
+      position => {
+        var lat = parseFloat(position.coords.latitude)
+        var long = parseFloat(position.coords.longitude)
+
+        var inicialRegion = {
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }
+
+        this.setState({initialPosition: inicialRegion})
+        this.setState({markerPosition: inicialRegion})
+      },
+      error => Alert.error('Error', JSONstringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+
+    this.watchID = Geolocation.watchPosition(position => {
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+      var newRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      }
+
+      this.setState({initialPosition: newRegion})
+      this.setState({markerPosition: newRegion})
+    });
   }
   componentWillUnmount() {
+    // Multi-língua
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+    //Geolocation
+    this.watchID != null && Geolocation.clearWatch(this.watchID);
   }
+  // Multi-língua
   handleLocalizationChange = () => {
     setI18nConfig();
     this.forceUpdate();
   };
-  // Multi-língua
   
   // Portrait e Landscape
   getOrientation(){
@@ -133,18 +182,25 @@ export default class Map extends React.Component{
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
-            region={{
-              latitude: 41.63683902,
-              longitude: -8.75321746,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}
+            region={this.state.initialPosition}
           >
+            <Marker
+              coordinate={this.state.markerPosition}
+              pinColor = {'green'}
+              >
+                <Callout>
+                <Button
+                  onPress={() => this.props.navigation.navigate('AddNewToMap')}
+                  title="Add new to map"
+                  />
+                </Callout>
+            </Marker>
 
           {
             this.state.data.map(marker => (
               <Marker
                 key={marker.id}
+                pinColor = {'blue'}
                 coordinate={
                   {
                     latitude: parseFloat(marker.latitude),
