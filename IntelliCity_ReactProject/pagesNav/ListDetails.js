@@ -65,6 +65,7 @@ export default class ListDetails extends React.Component{
       titulo : this.props.route.params.titulo,
       descricao : this.props.route.params.descricao,
       localizacao : this.props.route.params.localizacao,
+      fotografia : this.props.route.params.fotografia,
     };
     realm = new Realm({ path: 'reports.realm' });
 
@@ -156,11 +157,27 @@ export default class ListDetails extends React.Component{
   }
 
   deleteReport = () => {
-    realm.write(() => {
+    /*realm.write(() => {
       //const { id } = this.props.route.params;
       let task = realm.objects('report').filtered('id = ' + this.state.id);
       realm.delete(task);
+    });*/
+
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/deleteReport/' + this.state.id, {
+      method: "POST",//Request Type 
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      alert(JSON.stringify(responseJson));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
     });
+
     this.props.navigation.goBack();
   }
   // update e delete
@@ -168,8 +185,15 @@ export default class ListDetails extends React.Component{
   render() {    
     return (
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
-        <TextInput>{this.state.id}</TextInput>
-
+        <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
+        <Image
+          source={{
+            uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + this.state.fotografia,
+          }}
+          style = {this.getStyle().image} onLayout = {this.onLayout.bind(this)} >
+        </Image>
+        </View>
+        <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
         <TextInput
           placeholder={translate("TituloTextInput")}
           style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
@@ -191,6 +215,8 @@ export default class ListDetails extends React.Component{
           value={this.state.localizacao}
           onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
         />
+        </View>
+        <View style={this.getStyle().part3} onLayout = {this.onLayout.bind(this)}>
         <TouchableOpacity 
           onPress={this.updateRegisto} 
           activeOpacity={0.7} 
@@ -207,6 +233,7 @@ export default class ListDetails extends React.Component{
             style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
             >{translate("DeleteButton")}</Text>
          </TouchableOpacity>
+         </View>
      </View>
    );
  }
@@ -231,7 +258,6 @@ const portraitStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'flex-end',
-    margin: 10,
   },
   buttonview: {
     flex: 1,
@@ -252,10 +278,12 @@ const portraitStyles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    flex: 1,
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: "contain",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
   },
   TouchableOpacity: {
     height: 40,
@@ -289,17 +317,18 @@ const landscapeStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
-    //alignItems: 'center',
+    alignItems: 'center',
   },
   part2: {
     flex: 2,
     backgroundColor: 'white',
+    justifyContent: 'center',
   },
   part3: {
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'flex-end',
-    margin: 10,
+    justifyContent: 'center',
   },
   buttonview: {
     flex: 1,
@@ -322,10 +351,12 @@ const landscapeStyles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    flex: 1,
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: "contain",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
   },
   TouchableOpacity: {
     height: 40,
