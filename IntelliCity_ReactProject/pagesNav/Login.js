@@ -113,7 +113,6 @@ export default class LoginScreen extends React.Component{
   }
 
   ExecuteLogin = () => {
-    //this.setState({loading: true});
     let arr = {username: this.state.username, password: this.state.password};
     fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/loginUser', {
       method: "POST",//Request Type 
