@@ -14,6 +14,7 @@ import {LocalizationContext} from '../services/localization/LocalizationContext'
 
 import Map from './../pagesNav/Map';
 import AddNewToMap from './../pagesNav/AddNewToMap';
+import InsertReportMap from './../pagesNav/InsertReportMap';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,10 @@ function StackMap({navigation}) {
           <Stack.Screen 
             name="AddNewToMap" 
             component={AddNewToMap}
+            options={{ title: translations.AddNewToMap }} />
+            <Stack.Screen 
+            name="InsertReportMap" 
+            component={InsertReportMap}
             options={{ title: translations.AddNewToMap }} />
        </Stack.Navigator>
    );

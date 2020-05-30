@@ -20,12 +20,11 @@ import {
   Alert, 
   YellowBox,
   ListView,
-  FlatList ,
   TouchableWithoutFeedback
 } from 'react-native';
 
 import Realm from 'realm';
-let realm;
+let realm ;
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -55,58 +54,35 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class List extends React.Component{
+export default class InsertReportMap extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
-
-    realm = new Realm({ path: 'reports.realm' });
-    var reports = realm.objects('report');
 
     this.state = {
       screen: Dimensions.get('window'),
       titulo : '',
       descricao : '',
       localizacao : '',
-      FlatListItems: reports,
-      WSreports: [],
     };
 
-    realm.addListener('change', () => {
-      this.reloadData();
-    });
-  }
-
-  reloadData = () => {
-    this.setState({FlatListItems: realm.objects('report')});
-  }
-
-  ListViewItemSeparator = () => {
-    return (
-      <View style={{ height: 2, width: '100%', backgroundColor: '#000' }} />
-    );
-  };
-
-  GetAllReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe')
-    .then((response) => response.json())
-    //If response is in json then in success
-    .then((responseJson) => {
-      this.setState({WSreports: responseJson.DATA});
-      //alert(JSON.stringify(responseJson.DATA));
-      console.log(responseJson);
-    })
-    //If response is not in json then in error
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
+    realm = new Realm({
+      path: 'reports.realm', //nome da bd
+      schema: [{
+        name: 'report',
+        properties: {
+          id: {type: 'int',   default: 0},
+          titulo: 'string',
+          descricao: 'string',
+          localizacao: 'string',
+        }
+      }]
     });
   }
   
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
-    this.GetAllReports();
   }
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
@@ -137,59 +113,56 @@ export default class List extends React.Component{
   }
   // Portrait e Landscape
 
-  actionOnRow(item) {
-    this.props.navigation.navigate('ListDetails', item);
- }
+  addRegisto=()=>{
+    realm.write(() => {
+      var ID = realm.objects('report').length + 1;
+       realm.create('report', {
+         id: ID,
+         titulo: this.state.titulo,
+         descricao: this.state.descricao,
+         localizacao: this.state.localizacao,
+        });
+    });
+    Alert.alert("Report inserido com sucesso!");
+  }
 
- /*
-         <FlatList
-           data= {this.state.WSreports}
-           renderItem={({ item }) => (
-             <TouchableOpacity >
-                <Text>Nome: {item.nome}</Text>
-                <Text>titulo: {item.titulo}</Text>
-            </TouchableOpacity>
-           )}
-           keyExtractor= {item=>item.id}
-        />
- */
   render(){
     return(
-      <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
-
-
-
-          
-        <FlatList
-          data={this.state.FlatListItems}
-          ItemSeparatorComponent={this.ListViewItemSeparator}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TouchableWithoutFeedback onPress={ () => this.actionOnRow(item)}>
-              <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                backgroundColor: 'lightblue'
-              }}>
-                <Image
-                  source={require('../Images/map.png')}
-                  style={{width: 100, height: 100, margin: 10}} >
-                </Image>
-                <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
-                  <Text>Id: {item.id}</Text>
-                  <Text>titulo: {item.titulo}</Text>
-                  <Text>descricao: {item.descricao}</Text>
-                  <Text>localizacao: {item.localizacao}</Text>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        />
+      <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
+        <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
+          <TextInput
+              placeholder={translate("TituloTextInput")}
+              style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+              underlineColorAndroid = "transparent"
+              onChangeText = { ( text ) => { this.setState({ titulo: text })} }
+          />
+          <TextInput
+                placeholder={translate("DescricaoTextInput")}
+                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+                underlineColorAndroid = "transparent"
+                onChangeText = { ( text ) => { this.setState({ descricao: text })} }
+          />
+          <TextInput
+                placeholder={translate("LocalizationTextInput")}
+                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+                underlineColorAndroid = "transparent"
+                onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
+          />
+          <TouchableOpacity 
+            onPress={
+              this.addRegisto
+            } 
+            activeOpacity={0.7} 
+            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+            <Text 
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("AddButton")}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
-
 
 const portraitStyles = StyleSheet.create({
   container: {
@@ -200,7 +173,7 @@ const portraitStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center',
+    //alignItems: 'center',
   },
   part2: {
     flex: 2,
@@ -236,12 +209,26 @@ const portraitStyles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
   },
-  MainContainer :{
-    flex:1,
-    justifyContent: 'center',
-    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TextInputStyleGreen:{
+    borderWidth: 1,
     margin: 10,
-    flexDirection: 'column',
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });
    
@@ -254,7 +241,7 @@ const landscapeStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center',
+    //alignItems: 'center',
   },
   part2: {
     flex: 2,
@@ -292,11 +279,25 @@ const landscapeStyles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
   },
-  MainContainer :{
-     flex:1,
-     justifyContent: 'center',
-     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-     margin: 10,
-     flexDirection: 'row',
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TextInputStyleGreen:{
+    borderWidth: 1,
+    margin: 10,
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });

@@ -3,7 +3,8 @@ import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Callout, Polygon, Circle } from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 
 import {
   I18nManager,
@@ -63,22 +64,78 @@ export default class Map extends React.Component{
 
     this.state = {
       screen: Dimensions.get('window'),
+      data: [],
+      MyReports: [],
+      OthersReports: [],
+      latitude: null,
+      longitude: null,
+      initialPosition: {
+        latitude: 41.693447,
+        longitude: -8.846955,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      },
+      markerPosition: {
+        latitude: 0,
+        longitude: 0,
+      }
     };
-
   }
+
+  watchID: ?number = null
   
-  // Multi-língua
   componentDidMount() {
+    // Multi-língua
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    //Get reports from API
+    //this.GetAllReports();
+    this.GetMyReports();
+    this.GetOthersReports();
+    //Geolocation
+    Geolocation.getCurrentPosition(
+      position => {
+        var lat = parseFloat(position.coords.latitude)
+        var long = parseFloat(position.coords.longitude)
+
+        var inicialRegion = {
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }
+
+        this.setState({initialPosition: inicialRegion})
+        this.setState({markerPosition: inicialRegion})
+      },
+      error => Alert.error('Error', JSONstringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+
+    this.watchID = Geolocation.watchPosition(position => {
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+      var newRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      }
+
+      this.setState({initialPosition: newRegion})
+      this.setState({markerPosition: newRegion})
+    });
   }
   componentWillUnmount() {
+    // Multi-língua
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+    //Geolocation
+    this.watchID != null && Geolocation.clearWatch(this.watchID);
   }
+  // Multi-língua
   handleLocalizationChange = () => {
     setI18nConfig();
     this.forceUpdate();
   };
-  // Multi-língua
   
   // Portrait e Landscape
   getOrientation(){
@@ -99,27 +156,106 @@ export default class Map extends React.Component{
     this.setState({screen: Dimensions.get('window')});
   }
   // Portrait e Landscape
- /*
- <Button
-  onPress={() => this.props.navigation.navigate('AddNewToMap')}
-  title="Add new to map"
-  />
-*/
+
+  GetAllReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({data: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
+
+  GetMyReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/1')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({MyReports: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
+
+  GetOthersReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/1')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({OthersReports: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
+
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
-            region={{
-              latitude: 41.69137327,
-              longitude: -8.82829785,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}
+            region={this.state.initialPosition}
           >
-          </MapView>
+            <Marker
+              coordinate={this.state.markerPosition}
+              pinColor = {'green'}
+              onPress={() => this.props.navigation.navigate('AddNewToMap')}
+              >
+            </Marker>
 
+          {
+            this.state.MyReports.map(marker => (
+              <Marker
+                key={marker.id}
+                pinColor = {'blue'}
+                onPress={() => this.props.navigation.navigate('InsertReportMap')}
+                coordinate={
+                  {
+                    latitude: parseFloat(marker.latitude),
+                    longitude: parseFloat(marker.longitude)
+                  }
+                }>
+                    <Callout>
+                      <Text>{marker.titulo} - {marker.descricao}</Text>
+                    </Callout>
+              </Marker>
+            ))
+          }
+          {
+            this.state.OthersReports.map(marker => (
+              <Marker
+                key={marker.id}
+                pinColor = {'red'}
+                coordinate={
+                  {
+                    latitude: parseFloat(marker.latitude),
+                    longitude: parseFloat(marker.longitude)
+                  }
+                }>
+                    <Callout>
+                      <Text>{marker.titulo} - {marker.descricao}</Text>
+                    </Callout>
+              </Marker>
+            ))
+          }
+          </MapView>
       </View>
     );
   }
