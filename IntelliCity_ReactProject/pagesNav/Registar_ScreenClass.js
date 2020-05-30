@@ -54,6 +54,8 @@ export default class LoginScreen extends React.Component{
       nome:'',
       username: '',
       password: '',
+      morada: 'Viana do Castelo',
+      data_nasc : '1993-12-24',
     };
   }
   
@@ -90,6 +92,34 @@ export default class LoginScreen extends React.Component{
     this.setState({screen: Dimensions.get('window')});
   }
 
+  ExecuteRegistar = () => {
+    let arr = {
+      nome: this.state.nome,
+      username: this.state.username, 
+      password: this.state.password,
+      data_nasc: this.state.data_nasc,
+      morada: this.state.morada
+    };
+    alert(arr);
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/registoUser', {
+      method: "POST",//Request Type 
+      body: JSON.stringify(arr), //post body
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      alert(' registado com sucesso!');
+      this.props.navigation.navigate('Login');
+      //alert(JSON.stringify(responseJson));
+      console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  };
+
   render(){
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
@@ -102,24 +132,21 @@ export default class LoginScreen extends React.Component{
           <TextInput
             style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("NomeTextInput")}
-            onChangeText={nome => setNome(nome)}
+            onChangeText = { ( text ) => { this.setState({ nome: text })} }
           />
           <TextInput
             style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("UsernameTextInput")}
-            onChangeText={username => setUsername(username)}
+            onChangeText = { ( text ) => { this.setState({ username: text })} }
           />
           <TextInput
             style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("PasswordTextInput")}
-            onChangeText={password => setPassword(password)}
+            onChangeText = { ( text ) => { this.setState({ password: text })} }
           />
           <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
             <Button
-              onPress={() => {
-                //alert(nome + ' registado com sucesso!');
-                this.props.navigation.navigate('Login');
-              }}
+              onPress={this.ExecuteRegistar}
               color="green"
               title={translate("RegistarButton")}
             />
