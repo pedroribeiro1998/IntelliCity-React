@@ -205,6 +205,10 @@ export default class Map extends React.Component{
     });
   }
 
+  actionOnRow(marker) {
+    this.props.navigation.navigate('InsertReportMap', marker);
+ }
+
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
@@ -225,7 +229,7 @@ export default class Map extends React.Component{
               <Marker
                 key={marker.id}
                 pinColor = {'blue'}
-                onPress={() => this.props.navigation.navigate('InsertReportMap')}
+                onPress={ () => this.actionOnRow(marker)}
                 coordinate={
                   {
                     latitude: parseFloat(marker.latitude),
@@ -233,6 +237,12 @@ export default class Map extends React.Component{
                   }
                 }>
                     <Callout>
+                      <Image
+                        source={{
+                          uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + marker.fotografia,
+                        }}
+                        style={{width: 100, height: 100, alignItems: 'center'}} >
+                      </Image>
                       <Text>{marker.titulo} - {marker.descricao}</Text>
                     </Callout>
               </Marker>
@@ -250,6 +260,12 @@ export default class Map extends React.Component{
                   }
                 }>
                     <Callout>
+                      <Image
+                        source={{
+                          uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + marker.fotografia,
+                        }}
+                        style={{width: 100, height: 100, alignItems: 'center'}} >
+                      </Image>
                       <Text>{marker.titulo} - {marker.descricao}</Text>
                     </Callout>
               </Marker>

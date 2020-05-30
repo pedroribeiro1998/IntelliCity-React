@@ -14,7 +14,7 @@ import {LocalizationContext} from '../services/localization/LocalizationContext'
 
 import Map from './../pagesNav/Map';
 import AddNewToMap from './../pagesNav/AddNewToMap';
-import InsertReportMap from './../pagesNav/InsertReportMap';
+import InsertReportMap from './../pagesNav/ListDetails';
 
 const Stack = createStackNavigator();
 

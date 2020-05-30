@@ -136,8 +136,8 @@ export default class LoginScreen extends React.Component{
           });
         });
         this.props.navigation.navigate('DrawerRoute', {
-          //id_utilizador: responseJson.data.id,
-          username: responseJson.data.username,
+          id_utilizador: responseJson.data.id,
+          //username: responseJson.data.username,
           //nome: responseJson.data.nome,
         });
       } else if (responseJson.status === 'false') {

@@ -153,7 +153,7 @@ export default class List extends React.Component{
            keyExtractor= {item=>item.id}
         />
  */
-  render(){
+  render(){    
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
 
@@ -161,7 +161,7 @@ export default class List extends React.Component{
 
           
         <FlatList
-          data={this.state.FlatListItems}
+          data={this.state.WSreports}
           ItemSeparatorComponent={this.ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
@@ -172,7 +172,9 @@ export default class List extends React.Component{
                 backgroundColor: 'lightblue'
               }}>
                 <Image
-                  source={require('../Images/map.png')}
+                  source={{
+                    uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + item.fotografia,
+                  }}
                   style={{width: 100, height: 100, margin: 10}} >
                 </Image>
                 <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
@@ -240,7 +242,6 @@ const portraitStyles = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-    margin: 10,
     flexDirection: 'column',
   },
 });
@@ -296,7 +297,6 @@ const landscapeStyles = StyleSheet.create({
      flex:1,
      justifyContent: 'center',
      paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-     margin: 10,
      flexDirection: 'row',
   },
 });
