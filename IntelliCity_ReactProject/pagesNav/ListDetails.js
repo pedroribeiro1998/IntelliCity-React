@@ -106,43 +106,30 @@ export default class ListDetails extends React.Component{
 
   // update e delete
   updateRegisto=()=>{
-    var that = this;
-    if (this.state.titulo) {
-      if (this.state.descricao) {
-        if (this.state.localizacao) {
-          realm.write(() => {
-            var obj = realm
-              .objects('report')
-              .filtered('id =' + this.state.id);
-            if (obj.length > 0) {
-              obj[0].titulo = this.state.titulo;
-              obj[0].descricao = this.state.descricao;
-              obj[0].localizacao = this.state.localizacao;
-              Alert.alert(
-                'Info',
-                'Registo atualizado com sucesso',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () =>
-                      that.props.navigation.goBack(),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else {
-              alert('Atualização falhou');
-            }
-          });
-        } else {
-          alert('Preencha o localizacao');
-        }
-      } else {
-        alert('Preencha a descricao');
-      }
-    } else {
-      alert('Preencha o titulo');
-    }
+    let arr = {
+      titulo: this.state.titulo,
+      descricao: this.state.descricao, 
+      localizacao: this.state.localizacao
+    };
+    alert(arr);
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/updateReport/' + this.state.id, {
+      method: "POST",//Request Type 
+      body: JSON.stringify(arr), //post body
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      alert('Atualizado com sucesso!');
+      //alert(JSON.stringify(responseJson));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+    
+    this.props.navigation.goBack();
   }
 
   deleteRegisto=()=>{
@@ -157,19 +144,14 @@ export default class ListDetails extends React.Component{
   }
 
   deleteReport = () => {
-    /*realm.write(() => {
-      //const { id } = this.props.route.params;
-      let task = realm.objects('report').filtered('id = ' + this.state.id);
-      realm.delete(task);
-    });*/
-
     fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/deleteReport/' + this.state.id, {
       method: "POST",//Request Type 
     })
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
-      alert(JSON.stringify(responseJson));
+      alert('Eliminado com sucesso!');
+      //alert(JSON.stringify(responseJson));
       //console.log(responseJson);
     })
     //If response is not in json then in error
