@@ -65,6 +65,8 @@ export default class Map extends React.Component{
     this.state = {
       screen: Dimensions.get('window'),
       data: [],
+      MyReports: [],
+      OthersReports: [],
       latitude: null,
       longitude: null,
       initialPosition: {
@@ -86,7 +88,9 @@ export default class Map extends React.Component{
     // Multi-língua
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
     //Get reports from API
-    this.GetAllReports();
+    //this.GetAllReports();
+    this.GetMyReports();
+    this.GetOthersReports();
     //Geolocation
     Geolocation.getCurrentPosition(
       position => {
@@ -160,7 +164,7 @@ export default class Map extends React.Component{
     .then((responseJson) => {
       this.setState({data: responseJson.DATA});
       //alert(JSON.stringify(responseJson.DATA));
-      console.log(responseJson);
+      //console.log(responseJson);
     })
     //If response is not in json then in error
     .catch((error) => {
@@ -169,13 +173,38 @@ export default class Map extends React.Component{
     });
   }
 
+  GetMyReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/1')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({MyReports: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
 
- /*
- <Button
-  onPress={() => this.props.navigation.navigate('AddNewToMap')}
-  title="Add new to map"
-  />
-*/
+  GetOthersReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/1')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({OthersReports: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
+
   render(){
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
@@ -187,20 +216,16 @@ export default class Map extends React.Component{
             <Marker
               coordinate={this.state.markerPosition}
               pinColor = {'green'}
+              onPress={() => this.props.navigation.navigate('AddNewToMap')}
               >
-                <Callout>
-                <Button
-                  onPress={() => this.props.navigation.navigate('AddNewToMap')}
-                  title="Add new to map"
-                  />
-                </Callout>
             </Marker>
 
           {
-            this.state.data.map(marker => (
+            this.state.MyReports.map(marker => (
               <Marker
                 key={marker.id}
                 pinColor = {'blue'}
+                onPress={() => this.props.navigation.navigate('InsertReportMap')}
                 coordinate={
                   {
                     latitude: parseFloat(marker.latitude),
@@ -213,9 +238,24 @@ export default class Map extends React.Component{
               </Marker>
             ))
           }
-          
+          {
+            this.state.OthersReports.map(marker => (
+              <Marker
+                key={marker.id}
+                pinColor = {'red'}
+                coordinate={
+                  {
+                    latitude: parseFloat(marker.latitude),
+                    longitude: parseFloat(marker.longitude)
+                  }
+                }>
+                    <Callout>
+                      <Text>{marker.titulo} - {marker.descricao}</Text>
+                    </Callout>
+              </Marker>
+            ))
+          }
           </MapView>
-
       </View>
     );
   }
