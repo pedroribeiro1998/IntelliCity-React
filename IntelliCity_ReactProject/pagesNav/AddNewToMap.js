@@ -1,24 +1,10 @@
-/*Home Screen With buttons to navigate to diffrent options*/
-/*import React from 'react';
-import { View, Text, Button } from 'react-native';
-
- function AddNewToMap({ navigation }) {
-   return (
-     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-     <Text>map add new...</Text>
-
-     </View>
-   );
- }
-export default AddNewToMap;*/
-
 import * as React from 'react';
 import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
 import Geolocation from '@react-native-community/geolocation';
-
+import ImagePicker from 'react-native-image-picker';
 
 import {
   I18nManager,
@@ -85,7 +71,8 @@ export default class AddNewToMap extends React.Component{
       markerPosition: {
         latitude: 0,
         longitude: 0,
-      }
+      },
+      filePath: {}
     };
 
     realm = new Realm({
@@ -105,7 +92,7 @@ export default class AddNewToMap extends React.Component{
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
-
+    //get location to save lat and lng
     Geolocation.getCurrentPosition(
       position => {
         var lat = parseFloat(position.coords.latitude)
@@ -151,6 +138,40 @@ export default class AddNewToMap extends React.Component{
   }
   // Portrait e Landscape
 
+  // Take Picture
+  chooseFile = () => {
+    var options = {
+      title: 'Select Image',
+      customButtons: [
+        { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        let source = response;
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        this.setState({
+          filePath: source,
+        });
+      }
+    });
+  };
+  // Take Picture
+
   addRegisto=()=>{
     realm.write(() => {
       var ID = realm.objects('report').length + 1;
@@ -170,8 +191,21 @@ export default class AddNewToMap extends React.Component{
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
         <Image
           style = {this.getStyle().image} onLayout = {this.onLayout.bind(this)}
-          source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
+          source={{uri: 'data:image/jpeg;base64,' + this.state.filePath.data,}}
         />
+        <Text style={{ alignItems: 'center' }}>
+          {this.state.filePath.uri}
+        </Text>
+        <TouchableOpacity 
+            onPress={
+              this.chooseFile.bind(this)
+            } 
+            activeOpacity={0.7} 
+            style={this.getStyle().TouchableOpacityFoto} onLayout = {this.onLayout.bind(this)} >
+            <Text 
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("Picture")}</Text>
+          </TouchableOpacity>
         </View>
         <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
           <TextInput
@@ -274,6 +308,15 @@ const portraitStyles = StyleSheet.create({
     borderRadius:7,
     margin: 12
   },
+  TouchableOpacityFoto: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
   TextInputStyleGreen:{
     borderWidth: 1,
     margin: 10,
@@ -348,6 +391,15 @@ const landscapeStyles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     borderRadius:7,
     margin: 12
+  },
+  TouchableOpacityFoto: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   TextInputStyleGreen:{
     borderWidth: 1,

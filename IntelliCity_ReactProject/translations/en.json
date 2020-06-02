@@ -20,5 +20,6 @@
     "DeleteButton": "Delete",
     "AddButton": "Add",
     "Latitude": "Lat",
-    "Longitude": "Lng"
+    "Longitude": "Lng",
+    "Picture": "Take Picture"
   }

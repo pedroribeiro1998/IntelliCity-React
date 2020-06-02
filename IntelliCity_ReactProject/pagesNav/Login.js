@@ -3,7 +3,6 @@ import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 import { StackActions } from '@react-navigation/native';
-import {PostRequest} from '../services/webservices/Post';
 import Realm from 'realm';
 let realm;
 
