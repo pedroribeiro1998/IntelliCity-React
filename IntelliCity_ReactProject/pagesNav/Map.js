@@ -214,7 +214,11 @@ export default class Map extends React.Component{
 
   actionOnRow(marker) {
     this.props.navigation.navigate('ListDetails', marker);
- }
+  }
+
+  AddNewToMap(markerPosition) {
+    this.props.navigation.navigate('AddNewToMap', markerPosition);
+  }
 
   render(){
     return(
@@ -227,7 +231,7 @@ export default class Map extends React.Component{
             <Marker
               coordinate={this.state.markerPosition}
               pinColor = {'green'}
-              onPress={() => this.props.navigation.navigate('AddNewToMap')}
+              onPress={ () => this.props.navigation.navigate('AddNewToMap')}
               >
             </Marker>
 

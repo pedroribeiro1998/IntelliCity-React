@@ -18,5 +18,7 @@
     "LocalizationTextInput": "Localization",
     "UpdateButton": "Update",
     "DeleteButton": "Delete",
-    "AddButton": "Add"
+    "AddButton": "Add",
+    "Latitude": "Lat",
+    "Longitude": "Lng"
   }

@@ -94,7 +94,7 @@ export default class List extends React.Component{
     .then((responseJson) => {
       this.setState({WSreports: responseJson.DATA});
       //alert(JSON.stringify(responseJson.DATA));
-      console.log(responseJson);
+      //console.log(responseJson);
     })
     //If response is not in json then in error
     .catch((error) => {
