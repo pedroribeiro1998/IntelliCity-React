@@ -39,3 +39,6 @@ function StackMap({navigation}) {
  }
 
  export default StackMap;
+
+
+ //https://aboutreact.com/example-of-realm-database-in-react-native/

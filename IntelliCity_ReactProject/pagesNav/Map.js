@@ -78,9 +78,11 @@ export default class Map extends React.Component{
       markerPosition: {
         latitude: 0,
         longitude: 0,
-      }
+      },
+      userID : '',
+      userData: {},
     };
-
+    realm = new Realm({ path: 'utilizador.realm' });
     this.reloadData();
   }
 
@@ -89,9 +91,29 @@ export default class Map extends React.Component{
     this.GetOthersReports();
   }
 
+  searchUser = () => {
+    var user_details = realm
+      .objects('utilizador');
+    //console.log(user_details);
+    if (user_details.length > 0) {
+      console.log('Dados do user logado: ');
+      console.log(user_details[0]);
+      this.setState({
+        userData: user_details[0],
+        userID: user_details[0].id_user,
+      });
+    } else {
+      alert('No user found');
+      this.setState({
+        userData: '',
+      });
+    }
+  };
+
   watchID: ?number = null
   
   componentDidMount() {
+    this.searchUser();
     // Multi-língua
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
     //Get reports from API
@@ -181,7 +203,9 @@ export default class Map extends React.Component{
   }
 
   GetMyReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/1')
+    let id = 2;
+    //let id = this.state.userID;
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/' + id)
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
@@ -197,7 +221,9 @@ export default class Map extends React.Component{
   }
 
   GetOthersReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/1')
+    let id = 2;
+    //let id = this.state.userID;
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/' + id)
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
@@ -213,7 +239,7 @@ export default class Map extends React.Component{
   }
 
   actionOnRow(marker) {
-    this.props.navigation.navigate('ListDetails', marker);
+    this.props.navigation.navigate('ListDetails', marker, this.reloadData());
   }
 
   AddNewToMap(markerPosition) {
@@ -221,6 +247,7 @@ export default class Map extends React.Component{
   }
 
   render(){
+    this.reloadData();
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
           <MapView

@@ -128,7 +128,7 @@ export default class ListDetails extends React.Component{
       alert(JSON.stringify(error));
       console.error(error);
     });
-    
+    this.props.route.params.reloadData();
     this.props.navigation.goBack();
   }
 
@@ -159,7 +159,7 @@ export default class ListDetails extends React.Component{
       alert(JSON.stringify(error));
       console.error(error);
     });
-
+    this.reloadData();
     this.props.navigation.goBack();
   }
   // update e delete

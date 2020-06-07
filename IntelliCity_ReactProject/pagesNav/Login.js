@@ -154,6 +154,14 @@ export default class LoginScreen extends React.Component{
     });
   };
 
+  LetsRegistar = () => {
+    this.props.navigation.navigate('Registar_ScreenClass');
+  }
+
+  LetsListaReports = () => {
+    this.props.navigation.navigate('DrawerRouteSemLogin');
+  }
+
   render(){
     return(
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
@@ -165,47 +173,52 @@ export default class LoginScreen extends React.Component{
         </View>
         <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
         <TextInput
-          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+          style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           placeholder={translate("UsernameTextInput")}
+          underlineColorAndroid = "transparent"
           onChangeText={(val) => this.setState({username: val})}
         />
         <TextInput
-          style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+          style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
           placeholder={translate("PasswordTextInput")}
+          underlineColorAndroid = "transparent"
           onChangeText={(val) => this.setState({password: val})}
         />
         <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={this.ExecuteLogin}
-            color="blue"
-            title={translate("LoginButton")}
-          />
+        <TouchableOpacity 
+            onPress={
+              this.ExecuteLogin
+            } 
+            activeOpacity={0.7} 
+            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+            <Text 
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("LoginButton")}</Text>
+          </TouchableOpacity>
         </View>
         <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-            onPress={() => {
-              //alert('Vamos registar!');
-              this.props.navigation.navigate('Registar_ScreenClass');
-            }}
-            color="green"
-            title={translate("RegistarButton")}
-          />
+          <TouchableOpacity 
+            onPress={
+              this.LetsRegistar
+            } 
+            activeOpacity={0.7} 
+            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+            <Text 
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("RegistarButton")}</Text>
+          </TouchableOpacity>
         </View>
         <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-          <Button
-
-            onPress={() => {
-              this.props.navigation.navigate('DrawerRouteSemLogin');
-            }}
-            /*
-            onPress={() => {
-              //alert('Vamos registar!');
-              this.props.navigation.navigate('ReportsList_Screen');
-            }}
-            */
-            color="orange"
-            title={translate("ReportsListButton")}
-          />
+          <TouchableOpacity 
+            onPress={
+              this.LetsListaReports
+            } 
+            activeOpacity={0.7} 
+            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+            <Text 
+              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+            >{translate("ReportsListButton")}</Text>
+          </TouchableOpacity>
         </View>
       </View>
       </View>
@@ -258,6 +271,27 @@ const portraitStyles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
   },
+  TextInputStyleGreen:{
+    borderWidth: 1,
+    margin: 10,
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
+  },
 });
    
 const landscapeStyles = StyleSheet.create({
@@ -306,5 +340,26 @@ const landscapeStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  }, 
+  TextInputStyleGreen:{
+    borderWidth: 1,
+    margin: 10,
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });

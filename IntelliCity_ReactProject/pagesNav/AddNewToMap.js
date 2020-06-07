@@ -72,25 +72,39 @@ export default class AddNewToMap extends React.Component{
         latitude: 0,
         longitude: 0,
       },
-      filePath: {}
+      filePath: {},
+      userID : '',
+      userData: {},
+      fileData : null,
+      fileUri : null,
     };
 
-    realm = new Realm({
-      path: 'reports.realm', //nome da bd
-      schema: [{
-        name: 'report',
-        properties: {
-          id: {type: 'int',   default: 0},
-          titulo: 'string',
-          descricao: 'string',
-          localizacao: 'string',
-        }
-      }]
-    });
+    realm = new Realm({ path: 'utilizador.realm' });
   }
-  
+
+  searchUser = () => {
+    var user_details = realm
+      .objects('utilizador');
+    //console.log(user_details);
+    if (user_details.length > 0) {
+      console.log('Dados do user logado: ');
+      console.log(user_details[0]);
+      this.setState({
+        userData: user_details[0],
+        userID: user_details[0].id_user,
+      });
+    } else {
+      alert('No user found');
+      this.setState({
+        userData: '',
+      });
+    }
+  };
+
+
   // Multi-língua
   componentDidMount() {
+    this.searchUser();
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
     //get location to save lat and lng
     Geolocation.getCurrentPosition(
@@ -151,7 +165,7 @@ export default class AddNewToMap extends React.Component{
       },
     };
     ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response);
+      //console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -166,11 +180,41 @@ export default class AddNewToMap extends React.Component{
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           filePath: source,
+          fileData: response.data,
+          fileUri: response.uri
         });
       }
     });
   };
   // Take Picture
+
+  CreateReport = () => {
+    let arr = {
+      utilizador_id : this.state.userID,
+      titulo: this.state.titulo, 
+      descricao: this.state.descricao,
+      localizacao : this.state.localizacao,
+      fotografia: this.state.filePath.data, 
+      latitude: this.state.markerPosition.latitude,
+      longitude: this.state.markerPosition.longitude,
+    };
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/registoReport', {
+      method: "POST",//Request Type 
+      body: JSON.stringify(arr), //post body
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      alert('Report criado com sucesso!');
+      //alert(JSON.stringify(responseJson));
+      console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  };
 
   addRegisto=()=>{
     realm.write(() => {
@@ -193,9 +237,6 @@ export default class AddNewToMap extends React.Component{
           style = {this.getStyle().image} onLayout = {this.onLayout.bind(this)}
           source={{uri: 'data:image/jpeg;base64,' + this.state.filePath.data,}}
         />
-        <Text style={{ alignItems: 'center' }}>
-          {this.state.filePath.uri}
-        </Text>
         <TouchableOpacity 
             onPress={
               this.chooseFile.bind(this)
@@ -228,19 +269,9 @@ export default class AddNewToMap extends React.Component{
           />          
         </View>
         <View style={this.getStyle().part3} onLayout = {this.onLayout.bind(this)}>
-          <Text 
-            style = {this.getStyle().text} onLayout = {this.onLayout.bind(this)} 
-          >
-            {translate("Latitude") + ": " + this.state.markerPosition.latitude}
-          </Text>
-          <Text 
-            style = {this.getStyle().text} onLayout = {this.onLayout.bind(this)} 
-          >
-            {translate("Longitude") + ": " + this.state.markerPosition.longitude}
-          </Text>
           <TouchableOpacity 
             onPress={
-              this.addRegisto
+              this.CreateReport
             } 
             activeOpacity={0.7} 
             style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
