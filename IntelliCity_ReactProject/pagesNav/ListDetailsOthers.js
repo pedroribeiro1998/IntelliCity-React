@@ -54,7 +54,7 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class ListDetails extends React.Component{
+export default class ListDetailsOthers extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
@@ -104,64 +104,6 @@ export default class ListDetails extends React.Component{
   }
   // Portrait e Landscape
 
-  // update e delete
-  updateRegisto=()=>{
-    let arr = {
-      titulo: this.state.titulo,
-      descricao: this.state.descricao, 
-      localizacao: this.state.localizacao
-    };
-    alert(arr);
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/updateReport/' + this.state.id, {
-      method: "POST",//Request Type 
-      body: JSON.stringify(arr), //post body
-    })
-    .then((response) => response.json())
-    //If response is in json then in success
-    .then((responseJson) => {
-      alert(translate("AlertReportUpdate"));
-      //alert(JSON.stringify(responseJson));
-      //console.log(responseJson);
-    })
-    //If response is not in json then in error
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
-    });
-    this.props.navigation.goBack();
-  }
-
-  deleteRegisto=()=>{
-    Alert.alert(
-      'Info',
-      translate("AlertInfoApagar"),
-    [
-      {text: translate("Nao"), onPress: () => console.log('Pedido cancelado'), style: 'cancel'},
-      {text: translate("Sim"), onPress: () => {this.deleteReport();}},
-    ]
-    );
-  }
-
-  deleteReport = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports/deleteReport/' + this.state.id, {
-      method: "POST",//Request Type 
-    })
-    .then((response) => response.json())
-    //If response is in json then in success
-    .then((responseJson) => {
-      alert(translate("AlertReportDelete"));
-      //alert(JSON.stringify(responseJson));
-      //console.log(responseJson);
-    })
-    //If response is not in json then in error
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
-    });
-    this.props.navigation.goBack();
-  }
-  // update e delete
-
   render() {    
     return (
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
@@ -196,24 +138,6 @@ export default class ListDetails extends React.Component{
           onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
         />
         </View>
-        <View style={this.getStyle().part3} onLayout = {this.onLayout.bind(this)}>
-        <TouchableOpacity 
-          onPress={this.updateRegisto} 
-          activeOpacity={0.7} 
-          style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-          <Text 
-            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
-            >{translate("UpdateButton")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          onPress={this.deleteRegisto}
-          activeOpacity={0.7} 
-          style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-          <Text 
-            style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
-            >{translate("DeleteButton")}</Text>
-         </TouchableOpacity>
-         </View>
      </View>
    );
  }

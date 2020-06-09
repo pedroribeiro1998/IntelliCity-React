@@ -24,8 +24,14 @@
     "Picture": "Tirar Foto",
     "TxtUpdateMapa": "Atualizar Mapa",
     "AlertLoginSucesso": "Login efetuado com sucesso!",
+    "AlertReportCriado": "Report criado com sucesso!!",
+    "AlertReportUpdate": "Report atualizado com sucesso!!",
+    "AlertReportDelete": "Report eliminado com sucesso!!",
+    "AlertInfoApagar": "Tem a certeza que pretende remover este report?",
     "Id:": "Id: ",
     "titulo:": "titulo: ",
     "descricao:": "descrição: ",
-    "localizacao:": "localização: "
+    "localizacao:": "localização: ",
+    "Sim": "Sim",
+    "Nao":"Não"
   }

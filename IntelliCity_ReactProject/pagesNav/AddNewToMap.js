@@ -205,7 +205,7 @@ export default class AddNewToMap extends React.Component{
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
-      alert('Report criado com sucesso!');
+      alert(translate("AlertReportCriado"));
       //alert(JSON.stringify(responseJson));
       console.log(responseJson);
     })

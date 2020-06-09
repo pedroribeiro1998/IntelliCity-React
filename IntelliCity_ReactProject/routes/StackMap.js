@@ -15,6 +15,7 @@ import {LocalizationContext} from '../services/localization/LocalizationContext'
 import Map from './../pagesNav/Map';
 import AddNewToMap from './../pagesNav/AddNewToMap';
 import ListDetails from './../pagesNav/ListDetails';
+import ListDetailsOthers from './../pagesNav/ListDetailsOthers';
 
 const Stack = createStackNavigator();
 
@@ -30,9 +31,13 @@ function StackMap({navigation}) {
             name="AddNewToMap" 
             component={AddNewToMap}
             options={{ title: translations.AddNewToMap }} />
-            <Stack.Screen 
+          <Stack.Screen 
             name="ListDetails" 
             component={ListDetails}
+            options={{ title: translations.ListaDetalhes }} />
+          <Stack.Screen 
+            name="ListDetailsOthers" 
+            component={ListDetailsOthers}
             options={{ title: translations.ListaDetalhes }} />
        </Stack.Navigator>
    );
