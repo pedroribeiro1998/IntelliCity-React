@@ -247,14 +247,21 @@ export default class Map extends React.Component{
   }
 
   render(){
-    this.reloadData();
+    //this.reloadData();
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+        <TouchableOpacity
+          style={this.getStyle().button} onLayout = {this.onLayout.bind(this)}
+          onPress={() => this.reloadData()}>
+          <Text>{translate("TxtUpdateMapa")}</Text>
+        </TouchableOpacity>
+
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
             region={this.state.initialPosition}
           >
+            
             <Marker
               coordinate={this.state.markerPosition}
               pinColor = {'green'}
@@ -311,6 +318,7 @@ const portraitStyles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    zIndex: -1,
   },
   container: {
     flex: 1,
@@ -358,10 +366,15 @@ const portraitStyles = StyleSheet.create({
   },
   MainContainer :{
     flex:1,
-    justifyContent: 'center',
+    //justifyContent: 'center',
     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
 
     flexDirection: 'column',
+  },
+  button: {
+    justifyContent: 'center',
+    //backgroundColor: "#FFFFFF",
+    padding: 5,
   },
 });
    
@@ -372,6 +385,7 @@ const landscapeStyles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    zIndex: -1,
   },
   container: {
     flex: 1,
@@ -421,8 +435,13 @@ const landscapeStyles = StyleSheet.create({
   },
   MainContainer :{
      flex:1,
-     justifyContent: 'center',
+     //justifyContent: 'center',
      paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
      flexDirection: 'row',
+  },
+  button: {
+    //justifyContent: 'center',
+    //backgroundColor: "#FFFFFF",
+    padding: 5,
   },
 });

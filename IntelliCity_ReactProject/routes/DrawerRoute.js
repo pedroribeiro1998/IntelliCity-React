@@ -24,10 +24,6 @@ export default function DrawerRoute({navigation}) {
           options={{ title: translations.ReportsListNavBar }}
            />
         <Drawer.Screen 
-          name="InsertReport" 
-          component={InsertReport}
-          options={{ title: translations.InsertReport }} />
-        <Drawer.Screen 
           name="Map" 
           component={StackMap}
           options={{ title: translations.MapaNavBar }} />

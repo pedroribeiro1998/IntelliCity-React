@@ -21,5 +21,11 @@
     "AddButton": "Add",
     "Latitude": "Lat",
     "Longitude": "Lng",
-    "Picture": "Take Picture"
+    "Picture": "Take Picture",
+    "TxtUpdateMapa": "Update Map",
+    "AlertLoginSucesso": "Login successfully!!",
+    "Id:": "Id: ",
+    "titulo:": "title: ",
+    "descricao:": "description: ",
+    "localizacao:": "localization: "
   }

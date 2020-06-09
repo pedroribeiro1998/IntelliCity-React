@@ -156,10 +156,6 @@ export default class List extends React.Component{
   render(){    
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
-
-
-
-          
         <FlatList
           data={this.state.WSreports}
           ItemSeparatorComponent={this.ListViewItemSeparator}
@@ -178,10 +174,10 @@ export default class List extends React.Component{
                   style={{width: 100, height: 100, margin: 10}} >
                 </Image>
                 <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
-                  <Text>Id: {item.id}</Text>
-                  <Text>titulo: {item.titulo}</Text>
-                  <Text>descricao: {item.descricao}</Text>
-                  <Text>localizacao: {item.localizacao}</Text>
+                  <Text>{translate("Id:")} {item.id}</Text>
+                  <Text>{translate("titulo:")} {item.titulo}</Text>
+                  <Text>{translate("descricao:")} {item.descricao}</Text>
+                  <Text>{translate("localizacao:")} {item.localizacao}</Text>
                 </View>
               </View>
             </TouchableWithoutFeedback>

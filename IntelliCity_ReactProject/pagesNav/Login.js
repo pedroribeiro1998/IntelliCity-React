@@ -121,7 +121,7 @@ export default class LoginScreen extends React.Component{
     //If response is in json then in success
     .then((responseJson) => {
       if (responseJson.data.username && responseJson.data.password) {
-        alert('Login efetuado com sucesso!');
+        alert(translate("AlertLoginSucesso"));
         realm.write(() => {
           let ID = realm.objects('utilizador').length + 1;
           realm.create('utilizador', {
