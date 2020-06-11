@@ -18,5 +18,20 @@
     "LocalizationTextInput": "Localização",
     "UpdateButton": "Atualizar",
     "DeleteButton": "Apagar",
-    "AddButton": "Adicionar"
+    "AddButton": "Adicionar",
+    "Latitude": "Lat",
+    "Longitude": "Lng",
+    "Picture": "Tirar Foto",
+    "TxtUpdateMapa": "Atualizar Mapa",
+    "AlertLoginSucesso": "Login efetuado com sucesso!",
+    "AlertReportCriado": "Report criado com sucesso!!",
+    "AlertReportUpdate": "Report atualizado com sucesso!!",
+    "AlertReportDelete": "Report eliminado com sucesso!!",
+    "AlertInfoApagar": "Tem a certeza que pretende remover este report?",
+    "Id:": "Id: ",
+    "titulo:": "titulo: ",
+    "descricao:": "descrição: ",
+    "localizacao:": "localização: ",
+    "Sim": "Sim",
+    "Nao":"Não"
   }

@@ -78,13 +78,42 @@ export default class Map extends React.Component{
       markerPosition: {
         latitude: 0,
         longitude: 0,
-      }
+      },
+      userID : '',
+      userData: {},
     };
+    realm = new Realm({ path: 'utilizador.realm' });
+    this.reloadData();
   }
+
+  reloadData = () => {
+    this.GetMyReports();
+    this.GetOthersReports();
+  }
+
+  searchUser = () => {
+    var user_details = realm
+      .objects('utilizador');
+    //console.log(user_details);
+    if (user_details.length > 0) {
+      console.log('Dados do user logado: ');
+      console.log(user_details[0]);
+      this.setState({
+        userData: user_details[0],
+        userID: user_details[0].id_user,
+      });
+    } else {
+      alert('No user found');
+      this.setState({
+        userData: '',
+      });
+    }
+  };
 
   watchID: ?number = null
   
   componentDidMount() {
+    this.searchUser();
     // Multi-língua
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
     //Get reports from API
@@ -174,7 +203,9 @@ export default class Map extends React.Component{
   }
 
   GetMyReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/1')
+    let id = 2;
+    //let id = this.state.userID;
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/my/' + id)
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
@@ -190,7 +221,9 @@ export default class Map extends React.Component{
   }
 
   GetOthersReports = () => {
-    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/1')
+    let id = 2;
+    //let id = this.state.userID;
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe/others/' + id)
     .then((response) => response.json())
     //If response is in json then in success
     .then((responseJson) => {
@@ -205,18 +238,38 @@ export default class Map extends React.Component{
     });
   }
 
+  actionOnRow(marker) {
+    this.props.navigation.navigate('ListDetails', marker);
+  }
+
+  actionOnRowOthers(marker) {
+    this.props.navigation.navigate('ListDetailsOthers', marker);
+  }
+
+  AddNewToMap(markerPosition) {
+    this.props.navigation.navigate('AddNewToMap', markerPosition);
+  }
+
   render(){
+    //this.reloadData();
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
+        <TouchableOpacity
+          style={this.getStyle().button} onLayout = {this.onLayout.bind(this)}
+          onPress={() => this.reloadData()}>
+          <Text>{translate("TxtUpdateMapa")}</Text>
+        </TouchableOpacity>
+
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={this.getStyle().map} onLayout = {this.onLayout.bind(this)}
             region={this.state.initialPosition}
           >
+            
             <Marker
               coordinate={this.state.markerPosition}
               pinColor = {'green'}
-              onPress={() => this.props.navigation.navigate('AddNewToMap')}
+              onPress={ () => this.props.navigation.navigate('AddNewToMap')}
               >
             </Marker>
 
@@ -225,7 +278,7 @@ export default class Map extends React.Component{
               <Marker
                 key={marker.id}
                 pinColor = {'blue'}
-                onPress={() => this.props.navigation.navigate('InsertReportMap')}
+                onPress={ () => this.actionOnRow(marker)}
                 coordinate={
                   {
                     latitude: parseFloat(marker.latitude),
@@ -243,6 +296,7 @@ export default class Map extends React.Component{
               <Marker
                 key={marker.id}
                 pinColor = {'red'}
+                onPress={ () => this.actionOnRowOthers(marker)}
                 coordinate={
                   {
                     latitude: parseFloat(marker.latitude),
@@ -269,6 +323,7 @@ const portraitStyles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    zIndex: -1,
   },
   container: {
     flex: 1,
@@ -316,10 +371,15 @@ const portraitStyles = StyleSheet.create({
   },
   MainContainer :{
     flex:1,
-    justifyContent: 'center',
+    //justifyContent: 'center',
     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
 
     flexDirection: 'column',
+  },
+  button: {
+    justifyContent: 'center',
+    //backgroundColor: "#FFFFFF",
+    padding: 5,
   },
 });
    
@@ -330,6 +390,7 @@ const landscapeStyles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    zIndex: -1,
   },
   container: {
     flex: 1,
@@ -379,8 +440,13 @@ const landscapeStyles = StyleSheet.create({
   },
   MainContainer :{
      flex:1,
-     justifyContent: 'center',
+     //justifyContent: 'center',
      paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
      flexDirection: 'row',
+  },
+  button: {
+    //justifyContent: 'center',
+    //backgroundColor: "#FFFFFF",
+    padding: 5,
   },
 });

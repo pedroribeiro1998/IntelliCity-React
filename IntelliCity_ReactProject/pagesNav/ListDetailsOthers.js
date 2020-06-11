@@ -54,30 +54,21 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class InsertReportMap extends React.Component{
+export default class ListDetailsOthers extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
 
     this.state = {
       screen: Dimensions.get('window'),
-      titulo : '',
-      descricao : '',
-      localizacao : '',
+      id: this.props.route.params.id,
+      titulo : this.props.route.params.titulo,
+      descricao : this.props.route.params.descricao,
+      localizacao : this.props.route.params.localizacao,
+      fotografia : this.props.route.params.fotografia,
     };
+    realm = new Realm({ path: 'reports.realm' });
 
-    realm = new Realm({
-      path: 'reports.realm', //nome da bd
-      schema: [{
-        name: 'report',
-        properties: {
-          id: {type: 'int',   default: 0},
-          titulo: 'string',
-          descricao: 'string',
-          localizacao: 'string',
-        }
-      }]
-    });
   }
   
   // Multi-língua
@@ -113,55 +104,43 @@ export default class InsertReportMap extends React.Component{
   }
   // Portrait e Landscape
 
-  addRegisto=()=>{
-    realm.write(() => {
-      var ID = realm.objects('report').length + 1;
-       realm.create('report', {
-         id: ID,
-         titulo: this.state.titulo,
-         descricao: this.state.descricao,
-         localizacao: this.state.localizacao,
-        });
-    });
-    Alert.alert("Report inserido com sucesso!");
-  }
-
-  render(){
-    return(
+  render() {    
+    return (
       <View style={this.getStyle().container} onLayout = {this.onLayout.bind(this)}>
         <View style={this.getStyle().part1} onLayout = {this.onLayout.bind(this)}>
-          <TextInput
-              placeholder={translate("TituloTextInput")}
-              style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-              underlineColorAndroid = "transparent"
-              onChangeText = { ( text ) => { this.setState({ titulo: text })} }
-          />
-          <TextInput
-                placeholder={translate("DescricaoTextInput")}
-                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-                underlineColorAndroid = "transparent"
-                onChangeText = { ( text ) => { this.setState({ descricao: text })} }
-          />
-          <TextInput
-                placeholder={translate("LocalizationTextInput")}
-                style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
-                underlineColorAndroid = "transparent"
-                onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
-          />
-          <TouchableOpacity 
-            onPress={
-              this.addRegisto
-            } 
-            activeOpacity={0.7} 
-            style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
-            <Text 
-              style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
-            >{translate("AddButton")}</Text>
-          </TouchableOpacity>
+        <Image
+          source={{
+            uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + this.state.fotografia,
+          }}
+          style = {this.getStyle().image} onLayout = {this.onLayout.bind(this)} >
+        </Image>
         </View>
-      </View>
-    );
-  }
+        <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
+        <TextInput
+          placeholder={translate("TituloTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.titulo}
+          onChangeText = { ( text ) => { this.setState({ titulo: text })} }
+        />
+        <TextInput
+          placeholder={translate("DescricaoTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.descricao}
+          onChangeText = { ( text ) => { this.setState({ descricao: text })} }
+        />
+        <TextInput
+          placeholder={translate("LocalizationTextInput")}
+          style = {this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
+          underlineColorAndroid = "transparent"
+          value={this.state.localizacao}
+          onChangeText = { ( text ) => { this.setState({ localizacao: text })} }
+        />
+        </View>
+     </View>
+   );
+ }
 }
 
 const portraitStyles = StyleSheet.create({
@@ -183,7 +162,6 @@ const portraitStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'flex-end',
-    margin: 10,
   },
   buttonview: {
     flex: 1,
@@ -204,10 +182,12 @@ const portraitStyles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    flex: 1,
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: "contain",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
   },
   TouchableOpacity: {
     height: 40,
@@ -241,17 +221,18 @@ const landscapeStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
-    //alignItems: 'center',
+    alignItems: 'center',
   },
   part2: {
     flex: 2,
     backgroundColor: 'white',
+    justifyContent: 'center',
   },
   part3: {
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'flex-end',
-    margin: 10,
+    justifyContent: 'center',
   },
   buttonview: {
     flex: 1,
@@ -274,10 +255,12 @@ const landscapeStyles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    flex: 1,
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: "contain",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
   },
   TouchableOpacity: {
     height: 40,

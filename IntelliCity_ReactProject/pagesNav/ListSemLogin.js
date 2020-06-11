@@ -20,7 +20,8 @@ import {
   Alert, 
   YellowBox,
   ListView,
-  FlatList 
+  FlatList ,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import Realm from 'realm';
@@ -54,7 +55,7 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-export default class List extends React.Component{
+export default class ListSemLogin extends React.Component{
   constructor(props) {
     super(props);
     setI18nConfig(); // set initial config
@@ -68,7 +69,16 @@ export default class List extends React.Component{
       descricao : '',
       localizacao : '',
       FlatListItems: reports,
+      WSreports: [],
     };
+
+    realm.addListener('change', () => {
+      this.reloadData();
+    });
+  }
+
+  reloadData = () => {
+    this.setState({FlatListItems: realm.objects('report')});
   }
 
   ListViewItemSeparator = () => {
@@ -76,10 +86,27 @@ export default class List extends React.Component{
       <View style={{ height: 2, width: '100%', backgroundColor: '#000' }} />
     );
   };
+
+  GetAllReports = () => {
+    fetch('https://intellicity.000webhostapp.com/myslim_commov1920/api/reports_detalhe')
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      this.setState({WSreports: responseJson.DATA});
+      //alert(JSON.stringify(responseJson.DATA));
+      //console.log(responseJson);
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+  }
   
   // Multi-língua
   componentDidMount() {
     RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    this.GetAllReports();
   }
   componentWillUnmount() {
     RNLocalize.removeEventListener("change", this.handleLocalizationChange);
@@ -110,37 +137,50 @@ export default class List extends React.Component{
   }
   // Portrait e Landscape
 
-  render(){
+  actionOnRow(item) {
+    this.props.navigation.navigate('ListDetails', item);
+ }
+
+ /*
+         <FlatList
+           data= {this.state.WSreports}
+           renderItem={({ item }) => (
+             <TouchableOpacity >
+                <Text>Nome: {item.nome}</Text>
+                <Text>titulo: {item.titulo}</Text>
+            </TouchableOpacity>
+           )}
+           keyExtractor= {item=>item.id}
+        />
+ */
+  render(){    
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
         <FlatList
-          data={this.state.FlatListItems}
+          data={this.state.WSreports}
           ItemSeparatorComponent={this.ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View style={{
-              flex: 1,
-              flexDirection: 'row',
-              backgroundColor: 'lightblue'
-            }}>
-              <Image
-                source={require('../Images/map.png')}
-                style={{width: 100, height: 100, margin: 10}} >
-              </Image>
-              <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
-                <Text>Id: {item.id}</Text>
-                <Text>titulo: {item.titulo}</Text>
-                <Text>descricao: {item.descricao}</Text>
-                <Text>localizacao: {item.localizacao}</Text>
-                <Button
-                  onPress={() => {
-                    this.props.navigation.navigate('ListDetails');
+            <TouchableWithoutFeedback onPress={ () => this.actionOnRow(item)}>
+              <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                backgroundColor: 'lightblue'
+              }}>
+                <Image
+                  source={{
+                    uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + item.fotografia,
                   }}
-                  color="darkgrey"
-                  title={translate("Detalhes")}
-                />
+                  style={{width: 100, height: 100, margin: 10}} >
+                </Image>
+                <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
+                  <Text>{translate("Id:")} {item.id}</Text>
+                  <Text>{translate("titulo:")} {item.titulo}</Text>
+                  <Text>{translate("descricao:")} {item.descricao}</Text>
+                  <Text>{translate("localizacao:")} {item.localizacao}</Text>
+                </View>
               </View>
-            </View>
+            </TouchableWithoutFeedback>
           )}
         />
       </View>
@@ -198,7 +238,6 @@ const portraitStyles = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-    margin: 10,
     flexDirection: 'column',
   },
 });
@@ -254,7 +293,6 @@ const landscapeStyles = StyleSheet.create({
      flex:1,
      justifyContent: 'center',
      paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-     margin: 10,
      flexDirection: 'row',
   },
 });

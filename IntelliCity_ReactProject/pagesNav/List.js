@@ -94,7 +94,7 @@ export default class List extends React.Component{
     .then((responseJson) => {
       this.setState({WSreports: responseJson.DATA});
       //alert(JSON.stringify(responseJson.DATA));
-      console.log(responseJson);
+      //console.log(responseJson);
     })
     //If response is not in json then in error
     .catch((error) => {
@@ -153,15 +153,11 @@ export default class List extends React.Component{
            keyExtractor= {item=>item.id}
         />
  */
-  render(){
+  render(){    
     return(
       <View style={this.getStyle().MainContainer} onLayout = {this.onLayout.bind(this)} >
-
-
-
-          
         <FlatList
-          data={this.state.FlatListItems}
+          data={this.state.WSreports}
           ItemSeparatorComponent={this.ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
@@ -172,14 +168,16 @@ export default class List extends React.Component{
                 backgroundColor: 'lightblue'
               }}>
                 <Image
-                  source={require('../Images/map.png')}
+                  source={{
+                    uri: 'https://intellicity.000webhostapp.com/myslim_commov1920/report_photos/' + item.fotografia,
+                  }}
                   style={{width: 100, height: 100, margin: 10}} >
                 </Image>
                 <View style={{ flex: 1, flexDirection: 'column', margin:10 }}>
-                  <Text>Id: {item.id}</Text>
-                  <Text>titulo: {item.titulo}</Text>
-                  <Text>descricao: {item.descricao}</Text>
-                  <Text>localizacao: {item.localizacao}</Text>
+                  <Text>{translate("Id:")} {item.id}</Text>
+                  <Text>{translate("titulo:")} {item.titulo}</Text>
+                  <Text>{translate("descricao:")} {item.descricao}</Text>
+                  <Text>{translate("localizacao:")} {item.localizacao}</Text>
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -240,7 +238,6 @@ const portraitStyles = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-    margin: 10,
     flexDirection: 'column',
   },
 });
@@ -296,7 +293,6 @@ const landscapeStyles = StyleSheet.create({
      flex:1,
      justifyContent: 'center',
      paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-     margin: 10,
      flexDirection: 'row',
   },
 });

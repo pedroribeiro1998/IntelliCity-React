@@ -14,6 +14,7 @@ import {
   Button,
   TextInput,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 const translationGetters = {
@@ -130,26 +131,34 @@ export default class LoginScreen extends React.Component{
         </View>
         <View style={this.getStyle().part2} onLayout = {this.onLayout.bind(this)}>
           <TextInput
-            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("NomeTextInput")}
+            underlineColorAndroid = "transparent"
             onChangeText = { ( text ) => { this.setState({ nome: text })} }
           />
           <TextInput
-            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("UsernameTextInput")}
+            underlineColorAndroid = "transparent"
             onChangeText = { ( text ) => { this.setState({ username: text })} }
           />
           <TextInput
-            style={this.getStyle().textinput} onLayout = {this.onLayout.bind(this)}
+            style={this.getStyle().TextInputStyleGreen} onLayout = {this.onLayout.bind(this)}
             placeholder={translate("PasswordTextInput")}
+            underlineColorAndroid = "transparent"
             onChangeText = { ( text ) => { this.setState({ password: text })} }
           />
           <View style={this.getStyle().buttonview} onLayout = {this.onLayout.bind(this)}>
-            <Button
-              onPress={this.ExecuteRegistar}
-              color="green"
-              title={translate("RegistarButton")}
-            />
+            <TouchableOpacity 
+              onPress={
+                this.ExecuteRegistar
+              } 
+              activeOpacity={0.7} 
+              style={this.getStyle().TouchableOpacity} onLayout = {this.onLayout.bind(this)} >
+              <Text 
+                style={this.getStyle().TouchableOpacityText} onLayout = {this.onLayout.bind(this)}
+              >{translate("RegistarButton")}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -172,6 +181,12 @@ const portraitStyles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'white',
   },
+  part3: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'flex-end',
+    margin: 10,
+  },
   buttonview: {
     flex: 1,
     margin: 10,
@@ -195,6 +210,27 @@ const portraitStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  },
+  TextInputStyleGreen:{
+    borderWidth: 1,
+    margin: 10,
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });
    
@@ -213,6 +249,12 @@ const landscapeStyles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'white',
   },
+  part3: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'flex-end',
+    margin: 10,
+  },
   buttonview: {
     flex: 1,
     margin: 10,
@@ -225,6 +267,7 @@ const landscapeStyles = StyleSheet.create({
   textinput: {
     height: 40,
     borderColor: 'black',
+    //backgroundColor: 'grey',
     borderWidth: 1,
     margin: 10,
   },
@@ -237,5 +280,26 @@ const landscapeStyles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "contain",
+  }, 
+  TextInputStyleGreen:{
+    borderWidth: 1,
+    margin: 10,
+    borderColor: '#009688',
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  TouchableOpacity: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius:7,
+    margin: 12
+  },
+  TouchableOpacityText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });
